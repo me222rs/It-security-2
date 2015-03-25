@@ -1,11 +1,14 @@
 ﻿<?php
 require_once 'common/HTMLView.php';
+require_once 'DBDetails.php';
 	class ForumView extends HTMLView
 	{
 		private $model;
+		private $db;
 		public function __construct(LoginModel $model)
 		{
 			$this->model = $model;
+			$this->db = new DBDetails();
 		}
 		
 		public function didUserPressCreateNewTopic()
@@ -19,7 +22,7 @@ require_once 'common/HTMLView.php';
 		}
 		
 		public function didUserPressThread(){
-			if(isset($_GET['id'])){
+			if(isset($_GET['topicId'])){
 				return true;
 			}
 			return false;
@@ -29,21 +32,37 @@ require_once 'common/HTMLView.php';
 			return $_GET['topicId'];
 		}
 		
-		public function showTopics(){
-				$HTMLbody = "
+		public function getUserById($userId){
+			return $this->db->fetchUserById($userId);
+			
+		}
+		
+		public function showTopics(TopicList $topicList){
+					//$contentString ="<form method=post ><h3>Visar Alla Trådar</h3>";
+	
+					foreach($topicList->toArray() as $topic)
+					{
+						$userId = $this->getUserById($topic->getID());
+						
+						$contentString ="<form method=post ><h3>".$topic->getName()."</h3>";
+						$contentString .= "<a href='?delete&topicId=".$this->getTopicId()."'>Delete</a>"; 	
+						$contentString .= "<fieldset class='fieldshowall'><span class='spangradient'  style='white-space: nowrap'>Trådar:</span><br>";
+						$contentString.= "".$topic->getText()."<br>";
+						$contentString.= "Written by: ".array_values($userId)[0]."";
+						$contentString .= "</fieldset>";
+						
+						$contentString .= "Comments here!";
+						
+						
+					}
+							 
+					$contentString .= "</form>";
 					
-					<br><a href='?create'>Create new topic</a>
-					
-					<h2>Forum</h2>
-					<p>Forum topic 1</p>
-					<p>Forum topic 2</p>
-					<p>Forum topic 3</p>
-					
-					<p><a href='?logout'>Logga ut</a></p>
-				
-				";
-				
-				$this->echoHTML($HTMLbody);
+					$HTMLbody = "<div class='divshowall'>
+					<h1>Forum</h1>
+					<p><a href='?login'>Tillbaka</a></p>
+					$contentString</div>";
+					$this->echoHTML($HTMLbody);
 		}
 		
 		public function ShowAllEventsWithBandGrades(TopicList $topicList)

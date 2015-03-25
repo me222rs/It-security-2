@@ -1,6 +1,7 @@
 <?php
 
 require_once("TopicList.php");
+require_once("CommentList.php");
 
 		
 		
@@ -38,6 +39,9 @@ require_once("TopicList.php");
 		private static $topicText = "topicText";
 		private static $topicOwnerID = "topicOwnerID";
 		
+		private static $topicId = "topicID";
+		private static $tblLogin = "login";
+		
 		private static $event = "event";
 		private static $band = "band";
 		private static $id = "id";
@@ -71,7 +75,7 @@ require_once("TopicList.php");
 			return $this->dbConnection;
 		}
 		
-				public function fetchAllTopics()
+			public function fetchAllTopics()
 		{
 				$db = $this -> connection();
 				$this->dbTable = self::$tblTopics;
@@ -90,6 +94,40 @@ require_once("TopicList.php");
 				return $Topics;
 		}
 		
+		public function fetchTopic($topicId)
+		{
+				$db = $this -> connection();
+				$this->dbTable = self::$tblTopics;
+				$sql = "SELECT * FROM `$this->dbTable` WHERE topicID = ?";
+				$params = array($topicId);
+				$query = $db -> prepare($sql);
+				$query -> execute($params);
+				$result = $query -> fetchall();
+				
+				
+				$Topics = new TopicList();
+				foreach ($result as $topicdb) {
+					$Topic = new Topic($topicdb[self::$topicName], $topicdb[self::$topicid], $topicdb[self::$topicText], $topicdb[self::$topicOwnerID]);
+					$Topics->add($Topic);
+				}
+				return $Topics;
+		}
+		
+		
+		public function fetchUserById($userId)
+		{
+				$db = $this -> connection();
+				$this->dbTable = self::$tblLogin;
+				$sql = "SELECT username FROM `$this->dbTable` WHERE id = ?";
+				$params = array($userId);
+				$query = $db -> prepare($sql);
+				$query -> execute($params);
+				$result = $query -> fetch();
+				var_dump($result);
+				echo "Resultat = " . $result;
+				return $result;
+			
+		}
 		
 		
 		//Kontrollerar om användarnamnet är upptaget, returnerar true om det inte är upptaget. Annars kastas undantag.

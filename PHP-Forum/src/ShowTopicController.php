@@ -24,7 +24,14 @@
 			if($this->ShowForumView->didUserPressThread()){
 				echo "Visa en tråd";
 				$this->ShowForumView->getTopicId();
-				$this->ShowForumView->showTopics();
+				
+				//Hämta rad i databasen som har samma id som man klickade på
+				//Hämta rader i databasen med kommentarer som tillhör id
+				//Skicka med dessa till showtopics
+				$topics = $this->db->fetchTopic($this->ShowForumView->getTopicId());
+				//$comments = $this->db->fetchAllComments();
+				
+				$this->ShowForumView->showTopics($topics);
 			}
 			else{
 				echo "Kommer in i doHTMLBody";

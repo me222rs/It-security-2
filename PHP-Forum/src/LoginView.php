@@ -101,6 +101,8 @@ require_once 'common/HTMLView.php';
 							$this->message
 							Namn: <input type='text' name='$this->username' value='" . $this->getInputUsername() . "'>
 							L�senord: <input type='password' name='$this->password'> 
+							<div class='g-recaptcha' data-sitekey='6LdK9AMTAAAAABnYjmV2ZlSrdicAtpcqsxF7mX_M'></div>
+
 							<input type='checkbox' name='$this->checkbox' value='checked'>H�ll mig inloggad:
 							<button type='submit' name='button' form='loginForm' value='Submit'>Logga in</button>
 						</fieldset>
@@ -160,7 +162,7 @@ require_once 'common/HTMLView.php';
 							$this->message
 							Namn: <input type='text' name='$this->username' value='" . $this->getRegisterUsername() . "'>
 							L�senord: <input type='password' name='$this->password'>
-						
+							<div class='g-recaptcha' data-sitekey='6LdK9AMTAAAAABnYjmV2ZlSrdicAtpcqsxF7mX_M'></div>
 							<input type='checkbox' name='$this->checkbox' value='checked'>H�ll mig inloggad:
 							<button type='submit' name='button' form='loginForm' value='Submit'>Logga in</button>
 						</fieldset>

@@ -113,7 +113,6 @@
 		}
 		public function UsernameExistInDB(){
 		
-			
 				throw new Exception("Anv�ndarnamnet �r redan upptaget");
 		}
 		public function ValidateUsername($inputuser){
@@ -148,6 +147,8 @@
 			$query -> execute($params);
 			$result = $query -> fetch();
 			
+
+			
 			
 			if ($result) {
 				
@@ -161,7 +162,8 @@
 			$query = $db -> prepare($sql);
 			$query -> execute($params);
 			$result = $query -> fetch();
-			
+			echo "$result = ";
+
 			
 			if ($result) {
 				
@@ -184,30 +186,98 @@
 			
 			//var_dump($inputUsername);
 			//var_dump($inputPassword);
-			// Kontrollerar ifall inparametrarna matchar de faktiska anv�ndaruppgifterna.
-			if($inputUsername == $DB_Username && $inputPassword == $DB_Password)
-			{
-				// Inloggningsstatus och anv�ndarnamn sparas i sessionen.
-				$_SESSION['loggedIn'] = true;
-				$_SESSION['loggedInUser'] = $inputUsername;
-				
-				// Sparar useragent i sessionen.
-				$_SESSION['sessionUserAgent'] = $this->sessionUserAgent;
-								
-				return true;
-			}
-			else
-			{
-				// �r det en inloggning med cookies...
-				if($isCookieLogin)
+			
+			$msg='';
+				if($_SERVER["REQUEST_METHOD"] == "POST")
 				{
-					// Kasta cookie-felmeddelande.
-					$this->cookieException();
+					
+					$recaptcha=$_POST['g-recaptcha-response'];
+					if(!empty($recaptcha))
+					
+				{
+					
+					include("src/getCurlData.php");
+					$google_url="https://www.google.com/recaptcha/api/siteverify";
+					$secret='6LdK9AMTAAAAAKTOAvNLeThud6yglIw8K5g62yTx';
+					$ip=$_SERVER['REMOTE_ADDR'];
+					$url=$google_url."?secret=".$secret."&response=".$recaptcha."&remoteip=".$ip;
+					$res=getCurlData($url);
+					$res= json_decode($res, true);
+					//reCaptcha success check 
+					var_dump($res);
+					
+					if($res['success'] == NULL)
+					{
+						echo "QQQQQQQQQQQQQQQQQQQQ";
+						// Kontrollerar ifall inparametrarna matchar de faktiska anv�ndaruppgifterna.
+						if($inputUsername == $DB_Username && $inputPassword == $DB_Password)
+						{
+							// Inloggningsstatus och anv�ndarnamn sparas i sessionen.
+							$_SESSION['loggedIn'] = true;
+							$_SESSION['loggedInUser'] = $inputUsername;
+							
+							// Sparar useragent i sessionen.
+							$_SESSION['sessionUserAgent'] = $this->sessionUserAgent;
+			
+							return true;
+						}
+						else
+						{
+							// �r det en inloggning med cookies...
+							if($isCookieLogin)
+							{
+								// Kasta cookie-felmeddelande.
+								$this->cookieException();
+							}
+							
+							// Kasta undantag.
+							throw new Exception("Felaktigt anv�ndarnamn och/eller l�senord");
+						}
+					
+					
+					
+					}
+					else
+					{
+						throw new Exception("Fel captcha kod");
+					}
+				
+				}
+				else
+				{
+				throw new Exception("Wrong Captcha");
 				}
 				
-				// Kasta undantag.
-				throw new Exception("Felaktigt anv�ndarnamn och/eller l�senord");
-			}
+				}
+			
+			
+			
+			
+			
+			// // Kontrollerar ifall inparametrarna matchar de faktiska anv�ndaruppgifterna.
+			// if($inputUsername == $DB_Username && $inputPassword == $DB_Password)
+			// {
+				// // Inloggningsstatus och anv�ndarnamn sparas i sessionen.
+				// $_SESSION['loggedIn'] = true;
+				// $_SESSION['loggedInUser'] = $inputUsername;
+// 				
+				// // Sparar useragent i sessionen.
+				// $_SESSION['sessionUserAgent'] = $this->sessionUserAgent;
+// 								
+				// return true;
+			// }
+			// else
+			// {
+				// // �r det en inloggning med cookies...
+				// if($isCookieLogin)
+				// {
+					// // Kasta cookie-felmeddelande.
+					// $this->cookieException();
+				// }
+// 				
+				// // Kasta undantag.
+				// throw new Exception("Felaktigt anv�ndarnamn och/eller l�senord");
+			// }
 		}
 		
 		public function cookieException()
