@@ -5,6 +5,7 @@
 	require_once("LoginView.php");
 	require_once("ForumView.php");
 	require_once("ShowTopicController.php");
+	require_once("DeleteTopicController.php");
 	
 	class MasterController{
 		private $model;
@@ -22,7 +23,7 @@
 			echo "Kommer in i MasterController";
 			var_dump($this->view->didUserPressLogin());
 			//V�ljer vilken controller som ska anv�ndas beroende p� indata, t.ex. knappar och l�nkar.
-			if(!$this->view->didUserPressLogin() && !$this->forumView->didUserPressCreateNewTopic() && !$this->forumView->didUserPressTopic())
+			if(!$this->view->didUserPressLogin() && !$this->forumView->didUserPressCreateNewTopic() && !$this->forumView->didUserPressTopic() && !$this->forumView->didUserPressDeleteTopic())
 			{
 				echo "Kommer in i if";
 				$loginC = new LoginController();
@@ -37,6 +38,23 @@
 				$topicController->doHTMLBody();
 				//$loginC = new LoginController();
 				//$htmlBodyLogin = $loginC->doShowTopic();
+				
+			}
+			
+			elseif($this->forumView->didUserPressDeleteTopic() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() == 1){
+				//var_dump("Login status = " . $this->model->checkLoginStatus());
+				echo "Tryckt på ta bort topic";
+				
+				$deleteTopicController = new DeleteTopicController();
+				$deleteTopicController->doHTMLBody();
+
+			}
+			//När en roll försöker tas bort så kan endast användare med behörighet 1 eller lägre genomföra borttagningen
+			elseif($this->forumView->didUserPressDeleteTopic() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() > 1){
+				echo "Tryckt på ta bort topic";
+				
+				$topicController = new ShowTopicController();
+				$topicController->doHTMLBody();
 				
 			}
 			//Trycker på Create new topic

@@ -42,6 +42,7 @@ require_once("CommentList.php");
 		private static $topicId = "topicID";
 		private static $tblLogin = "login";
 		
+		
 		private static $event = "event";
 		private static $band = "band";
 		private static $id = "id";
@@ -75,7 +76,20 @@ require_once("CommentList.php");
 			return $this->dbConnection;
 		}
 		
-			public function fetchAllTopics()
+		public function DeleteTopic($topicID){
+			echo "KOmmer in i DeleteTopic";
+			
+			$db = $this -> connection();
+			$this->dbTable = self::$tblTopics;
+			$sql = "DELETE FROM $this->dbTable WHERE ". self::$topicId ." = ?";
+			$params = array($topicID);
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
+				
+		}
+		
+		
+		public function fetchAllTopics()
 		{
 				$db = $this -> connection();
 				$this->dbTable = self::$tblTopics;

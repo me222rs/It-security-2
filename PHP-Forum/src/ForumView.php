@@ -11,6 +11,9 @@ require_once 'DBDetails.php';
 			$this->db = new DBDetails();
 		}
 		
+		public function didUserPressDeleteTopic(){
+			return isset($_GET['delete']);
+		}
 		public function didUserPressCreateNewTopic()
 		{
 			return isset($_GET['create']);
@@ -42,7 +45,7 @@ require_once 'DBDetails.php';
 	
 					foreach($topicList->toArray() as $topic)
 					{
-						$userId = $this->getUserById($topic->getID());
+						$userId = $this->getUserById($topic->getOwner());
 						
 						$contentString ="<form method=post ><h3>".$topic->getName()."</h3>";
 						$contentString .= "<a href='?delete&topicId=".$this->getTopicId()."'>Delete</a>"; 	

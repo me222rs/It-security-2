@@ -134,6 +134,9 @@
 			
 		}
 		
+		public function getUserRole(){
+			
+		}
 		
 		// Kontrollerar anv�ndarinput gentemot de faktiska anv�ndaruppgifterna.
 		public function verifyUserInput($inputUsername, $inputPassword, $isCookieLogin = false)
@@ -147,14 +150,11 @@
 			$query -> execute($params);
 			$result = $query -> fetch();
 			
-
-			
 			
 			if ($result) {
-				
-				
 				$result['username'];
 				$DB_Username = $result['username'];
+
 			}
 			$db = $this -> connection();
 			$sql = "SELECT `password` FROM `$this->dbTable` WHERE `password` = ?";
@@ -162,12 +162,10 @@
 			$query = $db -> prepare($sql);
 			$query -> execute($params);
 			$result = $query -> fetch();
-			echo "$result = ";
-
+			//echo "$result = ";
+			
 			
 			if ($result) {
-				
-				
 				$result['password'];
 				$DB_Password = $result['password'];
 				
@@ -212,13 +210,23 @@
 						// Kontrollerar ifall inparametrarna matchar de faktiska anv�ndaruppgifterna.
 						if($inputUsername == $DB_Username && $inputPassword == $DB_Password)
 						{
+							//Hämtar ut användarens roll ifall användarnamn och lösen matchar
+							$db = $this -> connection();
+							$sql = "SELECT `role` FROM `$this->dbTable` WHERE `username` = ?";
+							$params = array($DB_Username);
+							$query = $db -> prepare($sql);
+							$query -> execute($params);
+							$result = $query -> fetch();
+							
 							// Inloggningsstatus och anv�ndarnamn sparas i sessionen.
+							$_SESSION['role'] = $result['role'];
 							$_SESSION['loggedIn'] = true;
 							$_SESSION['loggedInUser'] = $inputUsername;
 							
 							// Sparar useragent i sessionen.
 							$_SESSION['sessionUserAgent'] = $this->sessionUserAgent;
-			
+							echo "Roll = ";
+							var_dump($_SESSION['role']);
 							return true;
 						}
 						else
@@ -233,9 +241,6 @@
 							// Kasta undantag.
 							throw new Exception("Felaktigt anv�ndarnamn och/eller l�senord");
 						}
-					
-					
-					
 					}
 					else
 					{
@@ -292,6 +297,14 @@
 			if(isset($_SESSION['loggedInUser']))
 			{
 				return $_SESSION['loggedInUser'];
+			}
+		}
+		
+		public function getLoggedInUserRole()
+		{
+			if(isset($_SESSION['role']))
+			{
+				return $_SESSION['role'];
 			}
 		}
 		
