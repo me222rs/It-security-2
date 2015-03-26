@@ -218,7 +218,7 @@
 							$query -> execute($params);
 							$result = $query -> fetch();
 							
-							// Inloggningsstatus och anv�ndarnamn sparas i sessionen.
+							// Inloggningsstatus, roll och anv�ndarnamn sparas i sessionen.
 							$_SESSION['role'] = $result['role'];
 							$_SESSION['loggedIn'] = true;
 							$_SESSION['loggedInUser'] = $inputUsername;

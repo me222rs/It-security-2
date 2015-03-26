@@ -7,7 +7,7 @@ require_once("Comment.php");
 			$this->comments = array();
 		}
 		//Lägger in, in parametern band i arrayen.
-		public function add(Topic $comment){
+		public function add(Comment $comment){
 			$this->comments[] = $comment;
 		}
 		//Returnerar arrayen.

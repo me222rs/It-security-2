@@ -41,14 +41,7 @@
 			}
 			else // Annars, visa standardsidan p� normalt vis.
 			{
-				
-				
-				//if($this->forumView->didUserPressCreateNewTopic() && $this->model->checkLoginStatus()){
-					//$this->doCreateNewTopic();
-					//die();
-				//}
-				
-				
+
 				// Ifall anv�ndaren tryckt p� "Logga in" och inte redan �r inloggad...
 				if($this->view->didUserPressLogin() && !$this->model->checkLoginStatus())
 				{
@@ -167,9 +160,9 @@
 				$this->view->successfulLogout();
 			}
 		}
-		public function doCreateNewTopic(){
-			$this->forumView->showNewTopicForm();
-		}
+		// public function doCreateNewTopic(){
+			// $this->forumView->showNewTopicForm();
+		// }
 		public function doShowTopic(){
 			$this->forumView->showTopics();
 		}

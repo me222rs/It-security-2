@@ -39,9 +39,14 @@ require_once("CommentList.php");
 		private static $topicText = "topicText";
 		private static $topicOwnerID = "topicOwnerID";
 		
-		private static $topicId = "topicID";
-		private static $tblLogin = "login";
+		private static $commentID = "commentID";
+		private static $topicId = "topicId";
+		private static $comment = "comment";
+		private static $commentPoster = "commentPoster";
 		
+		//private static $topicId = "topicID";
+		private static $tblLogin = "login";
+		private static $tblComments = "topiccomments";
 		
 		private static $event = "event";
 		private static $band = "band";
@@ -76,6 +81,21 @@ require_once("CommentList.php");
 			return $this->dbConnection;
 		}
 		
+		public function createNewTopic($a_TopicName, $a_topicText, $a_user){
+			
+			try{
+				$db = $this -> connection();
+				$this->dbTable = self::$tblTopics;
+				$sql = "INSERT INTO $this->dbTable (". self::$topicName .",". self::$topicText  .", ". self::$topicOwnerID  .") VALUES (?, ?, ?)";
+				$params = array($a_TopicName, $a_topicText, $a_user);
+				$query = $db -> prepare($sql);
+				$query -> execute($params);
+				
+			} catch (\PDOException $e) {
+				die('An unknown error have occured.');
+			}
+		}
+		
 		public function DeleteTopic($topicID){
 			echo "KOmmer in i DeleteTopic";
 			
@@ -88,6 +108,27 @@ require_once("CommentList.php");
 				
 		}
 		
+		public function fetchAllComments($topicId){
+			//echo "Snusk";
+			//echo $commentID;
+				$db = $this -> connection();
+				$this->dbTable = self::$tblComments;
+				$sql = "SELECT * FROM `$this->dbTable` WHERE topicId = ?";
+				$params = array($topicId);
+				$query = $db -> prepare($sql);
+				$query -> execute($params);
+				$result = $query -> fetchall();
+
+				
+				$Comments = new CommentList();
+				foreach ($result as $commentdb) {
+					$Comment = new Comment($commentdb[self::$commentID], $commentdb[self::$topicId], $commentdb[self::$comment], $commentdb[self::$commentPoster]);
+					$Comments->add($Comment);
+				}
+				//var_dump($Comments);
+				
+				return $Comments;
+		}
 		
 		public function fetchAllTopics()
 		{
@@ -672,6 +713,23 @@ require_once("CommentList.php");
 			$this->dbTable = self::$tblSummaryGrade;
 			$sql = "UPDATE $this->dbTable SET ". self::$grade ."=? WHERE ". self::$id ."=?";
 			$params = array($inputgrade,$inputid);
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
+					
+			} catch (\PDOException $e) {
+					die('An unknown error have occured.');
+			}
+        
+		}
+		
+		public function EditTopic($EditTopicName,$EditTopicText, $topicID)
+		{
+			try{
+				
+			$db = $this -> connection();
+			$this->dbTable = self::$tblTopics;
+			$sql = "UPDATE $this->dbTable SET ". self::$topicName ."=?,". self::$topicText ."=? WHERE ". self::$topicId ."=?";
+			$params = array($EditTopicName,$EditTopicText,$topicID);
 			$query = $db -> prepare($sql);
 			$query -> execute($params);
 					

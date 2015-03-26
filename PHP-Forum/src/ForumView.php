@@ -14,10 +14,24 @@ require_once 'DBDetails.php';
 		public function didUserPressDeleteTopic(){
 			return isset($_GET['delete']);
 		}
+		
+		public function didUserPressEditTopic(){
+			return isset($_GET['edit']);
+		}
 		public function didUserPressCreateNewTopic()
 		{
 			return isset($_GET['create']);
 		}
+		
+		public function didUserPressPostNewTopic()
+		{
+			return isset($_GET['postNewTopic']);
+		}
+		
+		// public function didUserPressPostEditTopic()
+		// {
+			// return isset($_GET['postEditTopic']);
+		// }
 		
 		public function didUserPressTopic()
 		{
@@ -35,27 +49,91 @@ require_once 'DBDetails.php';
 			return $_GET['topicId'];
 		}
 		
+		public function getFormTopicName(){
+			if(isset($_POST['topicName']))
+			{
+				return $_POST['topicName'];
+			}
+			return false;
+		}
+		
+		public function getFormTopicEditName(){
+			if(isset($_POST['topicEditName']))
+			{
+				return $_POST['topicEditName'];
+			}
+			return false;
+		}
+		
+		public function getFormTopicText(){
+			if(isset($_POST['topicText']))
+			{
+				return $_POST['topicText'];
+			}
+			return false;
+		}
+		
+		public function getFormTopicEditText(){
+			if(isset($_POST['topicEditText']))
+			{
+				return $_POST['topicEditText'];
+			}
+			return false;
+		}
 		public function getUserById($userId){
 			return $this->db->fetchUserById($userId);
 			
 		}
+		public function didUserPressPostTopic(){
+			if(isset($_POST['sendNewTopic'])){
+				echo "tryckt på send";
+				return TRUE;
+			}
+			return FALSE;
+		}
 		
-		public function showTopics(TopicList $topicList){
+		public function didUserPressPostEditButtonTopic(){
+			if(isset($_POST['sendEditTopic'])){
+				echo "tryckt på edit2";
+				return TRUE;
+			}
+			return FALSE;
+		}
+		
+		
+		
+		
+		
+		
+		public function showTopics(TopicList $topicList, CommentList $commentList){
 					//$contentString ="<form method=post ><h3>Visar Alla Trådar</h3>";
-	
+				//var_dump($commentList);
 					foreach($topicList->toArray() as $topic)
 					{
-						$userId = $this->getUserById($topic->getOwner());
-						
+						//$userId = $this->getUserById($topic->getOwner());
+						//".array_values($userId)[0]."
 						$contentString ="<form method=post ><h3>".$topic->getName()."</h3>";
-						$contentString .= "<a href='?delete&topicId=".$this->getTopicId()."'>Delete</a>"; 	
+						$contentString .= "<a href='?delete&topicId=".$this->getTopicId()."'>Delete</a>";
+						$contentString .= "<a href='?edit&topicId=".$this->getTopicId()."'>Edit</a>"; 	
 						$contentString .= "<fieldset class='fieldshowall'><span class='spangradient'  style='white-space: nowrap'>Trådar:</span><br>";
 						$contentString.= "".$topic->getText()."<br>";
-						$contentString.= "Written by: ".array_values($userId)[0]."";
+						$contentString.= "Written by: ".$topic->getOwner()."";
 						$contentString .= "</fieldset>";
 						
 						$contentString .= "Comments here!";
+						$contentString .= "";
 						
+						
+						
+					}
+					
+					foreach($commentList->toArray() as $comment){
+						echo $comment->getComment();
+						$contentString .= "Comments here!";
+						$contentString .= "<fieldset class='fieldshowall'><span class='spangradient'  style='white-space: nowrap'>Trådar:</span><br>";
+						$contentString.= "".$comment->getComment()."<br>";
+						$contentString.= "Written by: ".$comment->getCommentPoster()."";
+						$contentString .= "</fieldset>";
 						
 					}
 							 
@@ -126,6 +204,42 @@ require_once 'DBDetails.php';
 				";
 			
 			$this->echoHTML($HTMLbody);
+		}
+		
+		public function showEditTopicForm(TopicList $topicList){
+					foreach($topicList->toArray() as $topic)
+					{
+						//$userId = $this->getUserById($topic->getOwner());
+						//".array_values($userId)[0]."
+						$contentString ="<form method=post ><h3>".$topic->getName()."</h3>";
+
+						$contentString .= "<fieldset class='fieldshowall'><span class='spangradient'  style='white-space: nowrap'>Trådar:</span><br>
+						
+						<input type='text' name='topicEditName' value='".$topic->getName()."'><br>
+							<textarea type='text' name='topicEditText'>".$topic->getText()."</textarea><br>
+						
+							
+						
+						
+						";
+						
+						$contentString.= "Written by: ".$topic->getOwner()." <br>Skicka: <input type='submit' name='sendEditTopic'  value='Send'>";
+						$contentString .= "</fieldset>";
+						
+						$contentString .= "Comments here!";
+						
+						
+					}
+							 
+					$contentString .= "</form>";
+					
+					$HTMLbody = "<div class='divshowall'>
+					<h1>Forum</h1>
+					<p><a href='?login'>Tillbaka</a></p>
+					$contentString</div>";
+					$this->echoHTML($HTMLbody);
+			
+			
 		}
 		
 		//Redigera sin egen post

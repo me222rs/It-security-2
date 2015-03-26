@@ -6,6 +6,8 @@
 	require_once("ForumView.php");
 	require_once("ShowTopicController.php");
 	require_once("DeleteTopicController.php");
+	require_once("CreateTopicController.php");
+	require_once("EditTopicController.php");
 	
 	class MasterController{
 		private $model;
@@ -23,7 +25,7 @@
 			echo "Kommer in i MasterController";
 			var_dump($this->view->didUserPressLogin());
 			//V�ljer vilken controller som ska anv�ndas beroende p� indata, t.ex. knappar och l�nkar.
-			if(!$this->view->didUserPressLogin() && !$this->forumView->didUserPressCreateNewTopic() && !$this->forumView->didUserPressTopic() && !$this->forumView->didUserPressDeleteTopic())
+			if(!$this->view->didUserPressLogin() && !$this->forumView->didUserPressCreateNewTopic() && !$this->forumView->didUserPressTopic() && !$this->forumView->didUserPressDeleteTopic() && !$this->forumView->didUserPressEditTopic())
 			{
 				echo "Kommer in i if";
 				$loginC = new LoginController();
@@ -60,9 +62,20 @@
 			//Trycker på Create new topic
 			elseif($this->forumView->didUserPressCreateNewTopic() && $this->model->checkLoginStatus()){
 				echo "Tryckt på skapa nytt ämne";
-				$loginC = new LoginController();
-				$htmlBodyLogin = $loginC->doCreateNewTopic();
+				$topicController = new CreateTopicController();
+				$topicController->doHTMLBody();
 				
+			}
+			
+			elseif($this->forumView->didUserPressEditTopic() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() == 1){
+				
+				$editTopicController = new EditTopicController();
+				$editTopicController->doHTMLBody();
+			}
+			elseif($this->forumView->didUserPressEditTopic() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() > 1){
+				
+				$topicController = new ShowTopicController();
+				$topicController->doHTMLBody();
 			}
 			
 			

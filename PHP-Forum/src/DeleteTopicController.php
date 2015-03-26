@@ -12,23 +12,21 @@
 		
 		public function __construct(){
 			$userAgent = $_SERVER['HTTP_USER_AGENT'];
-			// Skapar nya instanser av modell- & vy-klasser och lägger dessa i privata variabler.
 			$this->model = new LoginModel($userAgent);
 			$this->ShowForumView = new ForumView($this->model);
 			$this->db = new DBDetails();
-			//$this->doHTMLBody();
+
 		}
 		//anropar vilken vy som ska visas.
 		public function doHTMLBody()
 		{
 			if($this->ShowForumView->didUserPressDeleteTopic()){
-				echo "Förbereder för att ta bort";
 
-				//$topics = $this->db->fetchTopic($this->ShowForumView->getTopicId());
-				
+				//Tar bort en specifik topic med hjälp av ett id
 				$this->db->DeleteTopic($this->ShowForumView->getTopicId());
 				//$comments = $this->db->fetchAllComments();
 
+				//När topic har tagits bort så visas alla topics
 				$topics = $this->db->fetchAllTopics();
 				$this->ShowForumView->ShowAllEventsWithBandGrades($topics);
 

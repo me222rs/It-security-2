@@ -3,30 +3,30 @@
 		private $commentId;
 		private $topicId;
 		private $comment;
-		private $commentPosterId;
+		private $commentPoster;
 		//Tilldelar privata variabler konstruktorns inv�rden.
-		public function __construct($commentId, $topicId, $comment, $commentPosterId){
-			$this->$commentId = $commentId;
-			$this->$topicId = $topicId;
-			$this->$comment = $comment;
-			$this->$commentPosterId = $commentPosterId;
+		public function __construct($commentId, $topicId, $comment, $commentPoster){
+			$this->commentId = $commentId;
+			$this->topicId = $topicId;
+			$this->comment = $comment;
+			$this->commentPoster = $commentPoster;
 			
 		}
 		//Returnerar namnet.
 		public function getCommentID(){
-			return $this->$commentId;
+			return $this->commentId;
 		}
 		//Returnerar idet.
 		public function getTopicID(){
-			return $this->$topicId;
+			return $this->topicId;
 		}
 		
 		public function getComment(){
-			return $this->$comment;
+			return $this->comment;
 		}
 		
-		public function getcommentPosterID(){
-			return $this->$commentPosterId;
+		public function getCommentPoster(){
+			return $this->commentPoster;
 		}
 		
 		
