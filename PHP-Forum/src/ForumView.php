@@ -91,6 +91,23 @@ require_once 'DBDetails.php';
 			}
 			return FALSE;
 		}
+		public function didUserPressPostComment(){
+			if(isset($_POST['sendComment'])){
+				echo "tryckt på send comment";
+				return TRUE;
+			}
+			return FALSE;
+		}
+		
+		public function getFormCommentText(){
+			if(isset($_POST['CommentText']))
+			{
+				return $_POST['CommentText'];
+			}
+			return false;
+		}
+		
+		
 		
 		public function didUserPressPostEditButtonTopic(){
 			if(isset($_POST['sendEditTopic'])){
@@ -136,7 +153,9 @@ require_once 'DBDetails.php';
 						$contentString .= "</fieldset>";
 						
 					}
-							 
+					$contentString .= "	<textarea type='text' name='CommentText'></textarea><br>
+						
+										Skicka: <input type='submit' name='sendComment'  value='Send'>";	 
 					$contentString .= "</form>";
 					
 					$HTMLbody = "<div class='divshowall'>

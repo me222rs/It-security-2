@@ -2,6 +2,7 @@
 
 require_once("TopicList.php");
 require_once("CommentList.php");
+//require_once("LoginModel.php");
 
 		
 		
@@ -44,9 +45,15 @@ require_once("CommentList.php");
 		private static $comment = "comment";
 		private static $commentPoster = "commentPoster";
 		
+		
+		private static $User = "User";
+		private static $Action = "Action";
+		private static $Timestamp = "Timestamp";
+		
 		//private static $topicId = "topicID";
 		private static $tblLogin = "login";
 		private static $tblComments = "topiccomments";
+		private static $tblLogs = "logs";
 		
 		private static $event = "event";
 		private static $band = "band";
@@ -81,6 +88,40 @@ require_once("CommentList.php");
 			return $this->dbConnection;
 		}
 		
+		
+		public function LogAction($user, $action){
+			try{
+				$db = $this -> connection();
+				$this->dbTable = self::$tblLogs;
+				$sql = "INSERT INTO $this->dbTable (". self::$User .",". self::$Action  .") VALUES (?, ?)";
+				$params = array($user, $action);
+				$query = $db -> prepare($sql);
+				$query -> execute($params);
+				
+			} catch (\PDOException $e) {
+				die('An unknown error have occured.');
+			}
+		}
+		
+		public function createComment($commentText, $topicID, $user){
+			
+			try{
+				$db = $this -> connection();
+				$this->dbTable = self::$tblComments;
+				$sql = "INSERT INTO $this->dbTable (". self::$comment .",". self::$commentPoster .", ". self::$topicId .") VALUES (?, ?, ?)";
+				$params = array($commentText, $user, $topicID);
+				$query = $db -> prepare($sql);
+				$query -> execute($params);
+				//$this->LogAction($a_user, "Created topic with name: " . $a_TopicName . " and text: " . $a_topicText);
+				
+			} catch (\PDOException $e) {
+				//$this->LogAction($a_user, "Failed to create topic with name: " . $a_TopicName . " and text: " . $a_topicText);
+				die('An unknown error have occured.');
+			}
+		}
+		
+		
+		
 		public function createNewTopic($a_TopicName, $a_topicText, $a_user){
 			
 			try{
@@ -90,22 +131,29 @@ require_once("CommentList.php");
 				$params = array($a_TopicName, $a_topicText, $a_user);
 				$query = $db -> prepare($sql);
 				$query -> execute($params);
+				$this->LogAction($a_user, "Created topic with name: " . $a_TopicName . " and text: " . $a_topicText);
 				
 			} catch (\PDOException $e) {
+				$this->LogAction($a_user, "Failed to create topic with name: " . $a_TopicName . " and text: " . $a_topicText);
 				die('An unknown error have occured.');
 			}
 		}
 		
-		public function DeleteTopic($topicID){
-			echo "KOmmer in i DeleteTopic";
-			
+		public function DeleteTopic($topicID, $user){
+			try{
 			$db = $this -> connection();
 			$this->dbTable = self::$tblTopics;
 			$sql = "DELETE FROM $this->dbTable WHERE ". self::$topicId ." = ?";
 			$params = array($topicID);
 			$query = $db -> prepare($sql);
 			$query -> execute($params);
-				
+			
+			$this->LogAction($user, "Deleted topic with id " . $topicID);
+			
+		}catch (\PDOException $e) {
+			$this->LogAction($user, "Failed to delete topic with id " . $topicID);
+				die('An unknown error have occured.');
+			}
 		}
 		
 		public function fetchAllComments($topicId){
@@ -146,6 +194,7 @@ require_once("CommentList.php");
 					$Topic = new Topic($topicdb[self::$topicName], $topicdb[self::$topicid], $topicdb[self::$topicText], $topicdb[self::$topicOwnerID]);
 					$Topics->add($Topic);
 				}
+				
 				return $Topics;
 		}
 		
@@ -722,7 +771,7 @@ require_once("CommentList.php");
         
 		}
 		
-		public function EditTopic($EditTopicName,$EditTopicText, $topicID)
+		public function EditTopic($EditTopicName,$EditTopicText, $topicID, $user)
 		{
 			try{
 				
@@ -732,6 +781,8 @@ require_once("CommentList.php");
 			$params = array($EditTopicName,$EditTopicText,$topicID);
 			$query = $db -> prepare($sql);
 			$query -> execute($params);
+			
+			$this->LogAction($user, "Edited topic with id " . $topicID . ". Changed to " . " name: " . $EditTopicName . " & " . "text:" . $EditTopicText);
 					
 			} catch (\PDOException $e) {
 					die('An unknown error have occured.');

@@ -30,9 +30,16 @@
 				//Skicka med dessa till showtopics
 				$topics = $this->db->fetchTopic($this->ShowForumView->getTopicId());
 				$comments = $this->db->fetchAllComments($this->ShowForumView->getTopicId());
-				//$comments = $this->db->fetchAllComments();
-				//var_dump($comments);
 				$this->ShowForumView->showTopics($topics, $comments);
+				
+				if($this->ShowForumView->didUserPressPostComment()){
+					//$topicName = $this->ShowForumView->getFormTopicName();
+					$commentText = $this->ShowForumView->getFormCommentText();
+					
+					$this->db->createComment($commentText, $this->ShowForumView->getTopicId(), $this->model->getLoggedInUser());
+					$newURL = "?topics&topicId=" . $this->ShowForumView->getTopicId();
+					header('Location: '.$newURL);
+				}
 			}
 			else{
 				echo "Kommer in i doHTMLBody";

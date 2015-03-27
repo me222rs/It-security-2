@@ -35,7 +35,7 @@
 					
 					$EditTopicName = $this->ShowForumView->getFormTopicEditName();
 					$EditTopicText = $this->ShowForumView->getFormTopicEditText();
-					$this->db->EditTopic($EditTopicName,$EditTopicText,$this->ShowForumView->getTopicId());
+					$this->db->EditTopic($EditTopicName,$EditTopicText,$this->ShowForumView->getTopicId(), $this->model->getLoggedInUser());
 					$newURL = "?topics";
 					header('Location: '.$newURL);
 					

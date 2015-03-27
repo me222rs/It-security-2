@@ -77,6 +77,11 @@
 				$topicController = new ShowTopicController();
 				$topicController->doHTMLBody();
 			}
+			// elseif($this->forumView->didUserPressPostComment() && $this->model->checkLoginStatus()){
+// 				
+				// $topicController = new ShowTopicController();
+				// $topicController->doHTMLBody();
+			// }
 			
 			
 			else{

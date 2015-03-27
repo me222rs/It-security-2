@@ -1,10 +1,13 @@
 ﻿<?php
+require_once 'DBDetails.php';
 	class LoginModel
 	{
 		private $correctUsername = "";
 		private $correctPassword = "";
 		private $sessionUserAgent;
 		private $success = false;
+		private $db;
+		
 		
 		protected $dbUsername = "root";
 		protected $dbPassword = "";
@@ -17,6 +20,7 @@
 		{
 			// Sparar anv�ndarens useragent i den privata variablerna.
 			$this->sessionUserAgent = $userAgent;
+			$this->db = new DBDetails();
 		}
 		
 		// Kontrollerar loginstatusen. �r anv�ndaren inloggad returnerar metoden true, annars false.
@@ -210,6 +214,8 @@
 						// Kontrollerar ifall inparametrarna matchar de faktiska anv�ndaruppgifterna.
 						if($inputUsername == $DB_Username && $inputPassword == $DB_Password)
 						{
+							$this->db->LogAction($inputUsername, "User logged in");
+							
 							//Hämtar ut användarens roll ifall användarnamn och lösen matchar
 							$db = $this -> connection();
 							$sql = "SELECT `role` FROM `$this->dbTable` WHERE `username` = ?";
@@ -239,6 +245,7 @@
 							}
 							
 							// Kasta undantag.
+							$this->db->LogAction($inputUsername, "User failed to log in");
 							throw new Exception("Felaktigt anv�ndarnamn och/eller l�senord");
 						}
 					}
@@ -311,7 +318,7 @@
 		// Logout-metod som avs�tter och f�rst�r sessionen.
 		public function logOut()
 		{
-			
+			$this->db->LogAction($this->getLoggedInUser(), "User logged out");
 			session_unset();
 			session_destroy();
 		}

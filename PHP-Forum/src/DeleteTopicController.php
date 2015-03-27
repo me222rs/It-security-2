@@ -23,7 +23,7 @@
 			if($this->ShowForumView->didUserPressDeleteTopic()){
 
 				//Tar bort en specifik topic med hjälp av ett id
-				$this->db->DeleteTopic($this->ShowForumView->getTopicId());
+				$this->db->DeleteTopic($this->ShowForumView->getTopicId(), $this->model->getLoggedInUser());
 				//$comments = $this->db->fetchAllComments();
 
 				//När topic har tagits bort så visas alla topics
