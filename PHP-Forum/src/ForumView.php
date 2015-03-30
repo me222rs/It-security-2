@@ -176,6 +176,7 @@ require_once 'DBDetails.php';
 						
 					}
 					$contentString .= "Comments here!";
+					
 					foreach($commentList->toArray() as $comment){
 						
 						$contentString .= "<fieldset class='fieldshowall'>";
@@ -203,7 +204,7 @@ require_once 'DBDetails.php';
 			{
 				echo "test1";
 					$contentString ="<form method=post ><h3>Visar Alla Trådar</h3>";
-	
+					$contentString .= $this->message;
 					foreach($topicList->toArray() as $topic)
 					{
 							 	

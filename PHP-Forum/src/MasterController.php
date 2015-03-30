@@ -86,7 +86,15 @@
 				echo "Tryckt på ta bort topic";
 				
 				$deleteCommentController = new DeleteCommentController();
-				$deleteCommentController->doHTMLBody();
+				//$deleteCommentController->doHTMLBody();
+
+			}
+			elseif($this->forumView->didUserPressDeleteComment() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() > 1){
+				//var_dump("Login status = " . $this->model->checkLoginStatus());
+				echo "Tryckt på ta bort topic";
+				
+				$deleteCommentController = new DeleteCommentController();
+				//$deleteCommentController->doHTMLBody();
 
 			}
 			

@@ -15,22 +15,48 @@
 			$this->model = new LoginModel($userAgent);
 			$this->ShowForumView = new ForumView($this->model);
 			$this->db = new DBDetails();
+			$this->doControll();
+		}
+		//anropar vilken vy som ska visas.
+		public function doControll()
+		{
+			try
+			{
+			
+				if($this->ShowForumView->didUserPressDeleteComment() && $this->model->getLoggedInUserRole() == 1 && $this->model->checkLoginStatus()){
+	
+					//Tar bort en specifik topic med hjälp av ett id
+					$this->db->DeleteComment($this->ShowForumView->getCommentID(), $this->model->getLoggedInUser());
+					//$comments = $this->db->fetchAllComments();
+	
+					//När topic har tagits bort så visas alla topics
+					
+						
+	
+				}
+				elseif($this->ShowForumView->didUserPressDeleteComment() && $this->db->checkIfIdIsManipulated($this->ShowForumView->getCommentId(), $this->model->getLoggedInUser()) && 
+				$this->model->checkLoginStatus())
+				{
+					$this->db->DeleteComment($this->ShowForumView->getCommentID(), $this->model->getLoggedInUser());
+				}
+					
+				
+			}
+			catch(Exception $e)
+			{
+				$this->ShowForumView->showMessage($e->getMessage());
+			}
+			$this->doHTMLBody();
 
 		}
+		
 		//anropar vilken vy som ska visas.
 		public function doHTMLBody()
 		{
 			if($this->ShowForumView->didUserPressDeleteComment()){
-
-				//Tar bort en specifik topic med hjälp av ett id
-				$this->db->DeleteComment($this->ShowForumView->getCommentID(), $this->model->getLoggedInUser());
-				//$comments = $this->db->fetchAllComments();
-
-				//När topic har tagits bort så visas alla topics
+				$topics = $this->db->fetchAllTopics();
+				$this->ShowForumView->ShowAllEventsWithBandGrades($topics);
 				
-					$newURL = "?topics";
-					header('Location: '.$newURL);
-
 			}
 
 		}
