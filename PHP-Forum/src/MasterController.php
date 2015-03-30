@@ -8,6 +8,7 @@
 	require_once("DeleteTopicController.php");
 	require_once("CreateTopicController.php");
 	require_once("EditTopicController.php");
+	require_once("DeleteCommentController.php");
 	
 	class MasterController{
 		private $model;
@@ -25,7 +26,8 @@
 			echo "Kommer in i MasterController";
 			var_dump($this->view->didUserPressLogin());
 			//V�ljer vilken controller som ska anv�ndas beroende p� indata, t.ex. knappar och l�nkar.
-			if(!$this->view->didUserPressLogin() && !$this->forumView->didUserPressCreateNewTopic() && !$this->forumView->didUserPressTopic() && !$this->forumView->didUserPressDeleteTopic() && !$this->forumView->didUserPressEditTopic())
+			if(!$this->view->didUserPressLogin() && !$this->forumView->didUserPressCreateNewTopic() && !$this->forumView->didUserPressTopic() && !$this->forumView->didUserPressDeleteTopic() && !$this->forumView->didUserPressEditTopic()
+				&& !$this->forumView->didUserPressDeleteComment())
 			{
 				echo "Kommer in i if";
 				$loginC = new LoginController();
@@ -82,6 +84,15 @@
 				// $topicController = new ShowTopicController();
 				// $topicController->doHTMLBody();
 			// }
+			elseif($this->forumView->didUserPressDeleteComment() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() == 1){
+				//var_dump("Login status = " . $this->model->checkLoginStatus());
+				echo "Tryckt på ta bort topic";
+				
+				$deleteCommentController = new DeleteCommentController();
+				$deleteCommentController->doHTMLBody();
+
+			}
+
 			
 			
 			else{

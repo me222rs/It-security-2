@@ -14,6 +14,11 @@ require_once 'DBDetails.php';
 		public function didUserPressDeleteTopic(){
 			return isset($_GET['delete']);
 		}
+
+		public function didUserPressDeleteComment(){
+			echo "tryckt på delete comment";
+			return isset($_GET['deleteComment']);
+		}
 		
 		public function didUserPressEditTopic(){
 			return isset($_GET['edit']);
@@ -48,6 +53,11 @@ require_once 'DBDetails.php';
 		public function getTopicId(){
 			return $_GET['topicId'];
 		}
+
+		public function getCommentID(){
+			return $_GET['commentId'];
+		}
+		
 		
 		public function getFormTopicName(){
 			if(isset($_POST['topicName']))
@@ -137,17 +147,19 @@ require_once 'DBDetails.php';
 						$contentString.= "Written by: ".$topic->getOwner()."";
 						$contentString .= "</fieldset>";
 						
-						$contentString .= "Comments here!";
 						$contentString .= "";
 						
 						
 						
 					}
-					
+					$contentString .= "Comments here!";
 					foreach($commentList->toArray() as $comment){
+						
 						echo $comment->getComment();
-						$contentString .= "Comments here!";
-						$contentString .= "<fieldset class='fieldshowall'><span class='spangradient'  style='white-space: nowrap'>Trådar:</span><br>";
+						
+						$contentString .= "<fieldset class='fieldshowall'><span class='spangradient'  style='white-space: nowrap'>Kommentarer:</span><br>";
+						$contentString .= "<a href='?deleteComment&commentId=".$comment->getCommentID()."'>Delete</a>";
+						$contentString .= "<a href='?editComment&commentId=".$comment->getCommentID()."'>Edit</a>";
 						$contentString.= "".$comment->getComment()."<br>";
 						$contentString.= "Written by: ".$comment->getCommentPoster()."";
 						$contentString .= "</fieldset>";

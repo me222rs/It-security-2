@@ -150,8 +150,25 @@ require_once("CommentList.php");
 			
 			$this->LogAction($user, "Deleted topic with id " . $topicID);
 			
-		}catch (\PDOException $e) {
-			$this->LogAction($user, "Failed to delete topic with id " . $topicID);
+			}catch (\PDOException $e) {
+				$this->LogAction($user, "Failed to delete topic with id " . $topicID);
+				die('An unknown error have occured.');
+			}
+		}
+
+		public function DeleteComment($commentID, $user){
+			try{
+			$db = $this -> connection();
+			$this->dbTable = self::$tblComments;
+			$sql = "DELETE FROM $this->dbTable WHERE ". self::$commentID ." = ?";
+			$params = array($commentID);
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
+			
+			$this->LogAction($user, "Deleted comment with id " . $commentID);
+			
+			}catch (\PDOException $e) {
+				$this->LogAction($user, "Failed to delete comment with id " . $commentID);
 				die('An unknown error have occured.');
 			}
 		}
