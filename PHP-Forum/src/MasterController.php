@@ -9,6 +9,7 @@
 	require_once("CreateTopicController.php");
 	require_once("EditTopicController.php");
 	require_once("DeleteCommentController.php");
+	require_once("EditCommentController.php");
 	
 	class MasterController{
 		private $model;
@@ -27,7 +28,7 @@
 			var_dump($this->view->didUserPressLogin());
 			//V�ljer vilken controller som ska anv�ndas beroende p� indata, t.ex. knappar och l�nkar.
 			if(!$this->view->didUserPressLogin() && !$this->forumView->didUserPressCreateNewTopic() && !$this->forumView->didUserPressTopic() && !$this->forumView->didUserPressDeleteTopic() && !$this->forumView->didUserPressEditTopic()
-				&& !$this->forumView->didUserPressDeleteComment())
+				&& !$this->forumView->didUserPressDeleteComment() && !$this->forumView->didUserPressEditComment())
 			{
 				echo "Kommer in i if";
 				$loginC = new LoginController();
@@ -79,11 +80,7 @@
 				$topicController = new ShowTopicController();
 				$topicController->doHTMLBody();
 			}
-			// elseif($this->forumView->didUserPressPostComment() && $this->model->checkLoginStatus()){
-// 				
-				// $topicController = new ShowTopicController();
-				// $topicController->doHTMLBody();
-			// }
+
 			elseif($this->forumView->didUserPressDeleteComment() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() == 1){
 				//var_dump("Login status = " . $this->model->checkLoginStatus());
 				echo "Tryckt på ta bort topic";
@@ -91,6 +88,18 @@
 				$deleteCommentController = new DeleteCommentController();
 				$deleteCommentController->doHTMLBody();
 
+			}
+			
+			elseif($this->forumView->didUserPressEditComment() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() == 1){
+				echo "Tryckt på edit comment";
+				$editCommentController = new EditCommentController();
+				//$editCommentController->doHTMLBody();
+			}
+			
+			elseif($this->forumView->didUserPressEditComment() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() > 1){
+				
+				$topicController = new EditCommentController();
+				
 			}
 
 			

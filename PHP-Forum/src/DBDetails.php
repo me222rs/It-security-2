@@ -88,6 +88,25 @@ require_once("CommentList.php");
 			return $this->dbConnection;
 		}
 		
+		public function checkIfIdIsManipulated($pickedId, $loggedinUser)
+		{
+				$db = $this -> connection();
+				$this->dbTable = self::$tblComments;
+				$sql = "SELECT ". self::$commentID .",". self::$commentPoster ." FROM `".$this->dbTable."` WHERE ". self::$commentID ." = ? AND ". self::$commentPoster ." = ? ";
+				$params = array($pickedId, $loggedinUser);
+				$query = $db -> prepare($sql);
+				$query -> execute($params);
+				$result = $query -> fetch();
+								
+				
+				if ($result[self::$commentID] == null && $result[self::$commentPoster] == null ) {
+					throw new Exception("Id till det betyget har inte rätt användarnamn");
+				}else{
+					return true;
+				}
+			
+		}
+		
 		
 		public function LogAction($user, $action){
 			try{
@@ -102,6 +121,27 @@ require_once("CommentList.php");
 				die('An unknown error have occured.');
 			}
 		}
+		
+		
+		public function EditComment($editCommentText, $commentID, $user)
+		{
+			try{
+				
+			$db = $this -> connection();
+			$this->dbTable = self::$tblComments;
+			$sql = "UPDATE $this->dbTable SET ". self::$comment ."=? WHERE ". self::$commentID ."=?";
+			$params = array($editCommentText,$commentID);
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
+			
+			$this->LogAction($user, "Edited comment with id " . $commentID . ". Changed to " . "text:" . $editCommentText);
+					
+			} catch (\PDOException $e) {
+					die('An unknown error have occured.');
+			}
+        
+		}
+		
 		
 		public function createComment($commentText, $topicID, $user){
 			
@@ -172,6 +212,26 @@ require_once("CommentList.php");
 				die('An unknown error have occured.');
 			}
 		}
+		
+		public function fetchComment($commentId)
+		{
+				$db = $this -> connection();
+				$this->dbTable = self::$tblComments;
+				$sql = "SELECT * FROM `$this->dbTable` WHERE commentID = ?";
+				$params = array($commentId);
+				$query = $db -> prepare($sql);
+				$query -> execute($params);
+				$result = $query -> fetchall();
+				
+				
+				$Comments = new CommentList();
+				foreach ($result as $commentdb) {
+					$Comment = new Comment($commentdb[self::$commentID], $commentdb[self::$topicId], $commentdb[self::$comment], $commentdb[self::$commentPoster]);
+					$Comments->add($Comment);
+				}
+				return $Comments;
+		}
+		
 		
 		public function fetchAllComments($topicId){
 			//echo "Snusk";

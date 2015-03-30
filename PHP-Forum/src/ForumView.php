@@ -5,6 +5,8 @@ require_once 'DBDetails.php';
 	{
 		private $model;
 		private $db;
+		private $message = "";
+		
 		public function __construct(LoginModel $model)
 		{
 			$this->model = $model;
@@ -23,6 +25,12 @@ require_once 'DBDetails.php';
 		public function didUserPressEditTopic(){
 			return isset($_GET['edit']);
 		}
+		
+		public function didUserPressEditComment(){
+			//echo "tryckt på edit comment";
+			return isset($_GET['editComment']);
+		}
+		
 		public function didUserPressCreateNewTopic()
 		{
 			return isset($_GET['create']);
@@ -117,11 +125,26 @@ require_once 'DBDetails.php';
 			return false;
 		}
 		
+		public function getFormCommentEditText(){
+			if(isset($_POST['commentEditText']))
+			{
+				return $_POST['commentEditText'];
+			}
+			return false;
+		}
 		
 		
 		public function didUserPressPostEditButtonTopic(){
 			if(isset($_POST['sendEditTopic'])){
 				echo "tryckt på edit2";
+				return TRUE;
+			}
+			return FALSE;
+		}
+		
+		public function didUserPressPostEditButtonComment(){
+			if(isset($_POST['sendEditComment'])){
+				echo "tryckt på edit comment knappen";
 				return TRUE;
 			}
 			return FALSE;
@@ -140,9 +163,9 @@ require_once 'DBDetails.php';
 						//$userId = $this->getUserById($topic->getOwner());
 						//".array_values($userId)[0]."
 						$contentString ="<form method=post ><h3>".$topic->getName()."</h3>";
-						$contentString .= "<a href='?delete&topicId=".$this->getTopicId()."'>Delete</a>";
+						$contentString .= "<a href='?delete&topicId=".$this->getTopicId()."'>Delete</a> ";
 						$contentString .= "<a href='?edit&topicId=".$this->getTopicId()."'>Edit</a>"; 	
-						$contentString .= "<fieldset class='fieldshowall'><span class='spangradient'  style='white-space: nowrap'>Trådar:</span><br>";
+						$contentString .= "<fieldset class='fieldshowall'>";
 						$contentString.= "".$topic->getText()."<br>";
 						$contentString.= "Written by: ".$topic->getOwner()."";
 						$contentString .= "</fieldset>";
@@ -155,11 +178,9 @@ require_once 'DBDetails.php';
 					$contentString .= "Comments here!";
 					foreach($commentList->toArray() as $comment){
 						
-						echo $comment->getComment();
-						
-						$contentString .= "<fieldset class='fieldshowall'><span class='spangradient'  style='white-space: nowrap'>Kommentarer:</span><br>";
-						$contentString .= "<a href='?deleteComment&commentId=".$comment->getCommentID()."'>Delete</a>";
-						$contentString .= "<a href='?editComment&commentId=".$comment->getCommentID()."'>Edit</a>";
+						$contentString .= "<fieldset class='fieldshowall'>";
+						$contentString .= "<a href='?deleteComment&commentId=".$comment->getCommentID()."'>Delete</a> ";
+						$contentString .= "<a href='?editComment&commentId=".$comment->getCommentID()."'>Edit</a><br>";
 						$contentString.= "".$comment->getComment()."<br>";
 						$contentString.= "Written by: ".$comment->getCommentPoster()."";
 						$contentString .= "</fieldset>";
@@ -167,13 +188,14 @@ require_once 'DBDetails.php';
 					}
 					$contentString .= "	<textarea type='text' name='CommentText'></textarea><br>
 						
-										Skicka: <input type='submit' name='sendComment'  value='Send'>";	 
+										<input type='submit' name='sendComment'  value='Send'>";	 
 					$contentString .= "</form>";
 					
 					$HTMLbody = "<div class='divshowall'>
 					<h1>Forum</h1>
 					<p><a href='?login'>Tillbaka</a></p>
 					$contentString</div>";
+					
 					$this->echoHTML($HTMLbody);
 		}
 		
@@ -185,7 +207,7 @@ require_once 'DBDetails.php';
 					foreach($topicList->toArray() as $topic)
 					{
 							 	
-						$contentString .= "<fieldset class='fieldshowall'><span class='spangradient'  style='white-space: nowrap'>Trådar:</span>";
+						$contentString .= "<fieldset class='fieldshowall'>";
 						$contentString.= "<a href='?topics&topicId=".$topic->getID()."'>".$topic->getName()."</a>";
 						$contentString .= "</fieldset>";
 					}
@@ -236,6 +258,47 @@ require_once 'DBDetails.php';
 			
 			$this->echoHTML($HTMLbody);
 		}
+		
+		
+				public function showEditCommentForm(CommentList $commentList){
+
+					foreach($commentList->toArray() as $comment)
+					{
+						
+						
+						$contentString = $this->message;
+						$contentString ="<form method=post ><h3>Edit comment</h3>";
+
+						$contentString .= "<fieldset class='fieldshowall'><span class='spangradient'  style='white-space: nowrap'>hejsan:</span><br>
+						
+						
+							<textarea type='text' name='commentEditText'>".$comment->getComment()."</textarea><br>
+						
+							
+						
+						
+						";
+						
+						$contentString.= "Written by: ".$comment->getCommentPoster()." <br>Skicka: <input type='submit' name='sendEditComment'  value='Send'>";
+						$contentString .= "</fieldset>";
+						
+						$contentString .= "Comments here!";
+						
+						
+					}
+							 
+					$contentString .= "</form>";
+					
+					$HTMLbody = "<div class='divshowall'>
+					<h1>Forum</h1>
+					$this->message
+					<p><a href='?login'>Tillbaka</a></p>
+					$contentString</div>";
+					$this->echoHTML($HTMLbody);
+			
+			
+		}
+		
 		
 		public function showEditTopicForm(TopicList $topicList){
 					foreach($topicList->toArray() as $topic)
@@ -310,6 +373,12 @@ require_once 'DBDetails.php';
 				";
 			
 			$this->echoHTML($HTMLbody);
+		}
+		
+		// Visar eventuella meddelanden.
+		public function showMessage($message)
+		{
+			$this->message = "<p>" . $message . "</p>";
 		}
 	}
 ?>

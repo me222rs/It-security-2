@@ -27,11 +27,10 @@
 				//$comments = $this->db->fetchAllComments();
 
 				//När topic har tagits bort så visas alla topics
-				$topics = $this->db->fetchAllTopics();
-				$this->ShowForumView->ShowAllEventsWithBandGrades($topics);
+				
+					$newURL = "?topics";
+					header('Location: '.$newURL);
 
-				
-				
 			}
 
 		}
