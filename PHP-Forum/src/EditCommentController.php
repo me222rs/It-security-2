@@ -62,7 +62,7 @@
 					}
 				}
 				catch(Exception $e){
-					echo $e->getMessage();
+					
 					$this->ShowForumView->showMessage($e->getMessage());
 					
 					

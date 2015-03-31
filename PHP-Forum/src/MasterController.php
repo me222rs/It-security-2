@@ -73,8 +73,14 @@
 			elseif($this->forumView->didUserPressEditTopic() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() == 1){
 				
 				$editTopicController = new EditTopicController();
-				$editTopicController->doHTMLBody();
+				
 			}
+			elseif($this->forumView->didUserPressEditTopic() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() > 1){
+				
+				$editTopicController = new EditTopicController();
+				
+			}
+
 			elseif($this->forumView->didUserPressEditTopic() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() > 1){
 				
 				$topicController = new ShowTopicController();

@@ -136,7 +136,6 @@ require_once 'DBDetails.php';
 		
 		public function didUserPressPostEditButtonTopic(){
 			if(isset($_POST['sendEditTopic'])){
-				echo "tryckt på edit2";
 				return TRUE;
 			}
 			return FALSE;
@@ -202,7 +201,7 @@ require_once 'DBDetails.php';
 		
 		public function ShowAllEventsWithBandGrades(TopicList $topicList)
 			{
-				echo "test1";
+				
 					$contentString ="<form method=post ><h3>Visar Alla Trådar</h3>";
 					$contentString .= $this->message;
 					foreach($topicList->toArray() as $topic)
@@ -307,16 +306,11 @@ require_once 'DBDetails.php';
 						//$userId = $this->getUserById($topic->getOwner());
 						//".array_values($userId)[0]."
 						$contentString ="<form method=post ><h3>".$topic->getName()."</h3>";
-
+						$contentString .= $this->message;
 						$contentString .= "<fieldset class='fieldshowall'><span class='spangradient'  style='white-space: nowrap'>Trådar:</span><br>
 						
 						<input type='text' name='topicEditName' value='".$topic->getName()."'><br>
-							<textarea type='text' name='topicEditText'>".$topic->getText()."</textarea><br>
-						
-							
-						
-						
-						";
+						<textarea type='text' name='topicEditText'>".$topic->getText()."</textarea><br>";
 						
 						$contentString.= "Written by: ".$topic->getOwner()." <br>Skicka: <input type='submit' name='sendEditTopic'  value='Send'>";
 						$contentString .= "</fieldset>";
@@ -339,9 +333,12 @@ require_once 'DBDetails.php';
 		
 		//Redigera sin egen post
 		public function EditTopicForm(){
+			echo "hej";
+			echo $this->message;
 				$HTMLbody = "
 				<form method=post >
 						<fieldset>
+							$this->message
 							<legend>Edit topic</legend>
 							Topic name: <br>
 							<input type='text' name='topicName'><br>

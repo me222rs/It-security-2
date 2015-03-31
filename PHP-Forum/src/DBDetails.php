@@ -100,7 +100,26 @@ require_once("CommentList.php");
 								
 				
 				if ($result[self::$commentID] == null && $result[self::$commentPoster] == null ) {
-					throw new Exception("Id till det betyget har inte rätt användarnamn");
+					throw new Exception("You don't have the rights to do this");
+				}else{
+					return true;
+				}
+			
+		}
+
+		public function checkIfIdIsManipulatedTopic($pickedId, $loggedinUser)
+		{
+				$db = $this -> connection();
+				$this->dbTable = self::$tblTopics;
+				$sql = "SELECT ". self::$topicid .",". self::$topicOwnerID ." FROM `".$this->dbTable."` WHERE ". self::$topicid ." = ? AND ". self::$topicOwnerID ." = ? ";
+				$params = array($pickedId, $loggedinUser);
+				$query = $db -> prepare($sql);
+				$query -> execute($params);
+				$result = $query -> fetch();
+								
+				
+				if ($result[self::$topicid] == null && $result[self::$topicOwnerID] == null ) {
+					throw new Exception("You don't have the rights to do this");
 				}else{
 					return true;
 				}

@@ -121,7 +121,7 @@ require_once 'DBDetails.php';
 		}
 		public function ValidateUsername($inputuser){
 			
-			if(!preg_match('/^[A-Za-z][A-Za-z0-9]{5,31}$/', $inputuser))
+			if(!preg_match('/^[A-Za-z][A-Za-z0-9]{1,31}$/', $inputuser))
 			{
 				throw new Exception("Anv�ndarnamnet inneh�ller ogiltiga tecken");
 			}
