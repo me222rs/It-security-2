@@ -22,23 +22,28 @@
 		//anropar vilken vy som ska visas.
 		public function doControll()
 		{
+			try{
 			if($this->model->checkLoginStatus() && $this->ShowForumView->didUserPressEditComment() && $this->model->getLoggedInUserRole() == 1){
 			
-				if($this->ShowForumView->didUserPressPostEditButtonComment() && $this->model->getLoggedInUser()){
+			
+				if($this->ShowForumView->didUserPressPostEditButtonComment() && $this->model->getLoggedInUser() && 
+				$this->db->sanitizeString($this->ShowForumView->getFormCommentEditText())){
 					//echo "testar123";
 					$EditCommentText = $this->ShowForumView->getFormCommentEditText();
 					//echo "comment text= " . $EditCommentText;
 
 					$this->db->EditComment($EditCommentText, $this->ShowForumView->getCommentId(), $this->model->getLoggedInUser());
-					$newURL = "?topics";
-					header('Location: '.$newURL);
+					$this->ShowForumView->successfulEdit();
+					//$newURL = "?topics";
+					//header('Location: '.$newURL);
 
 					
 				}
 			}
+			
 			else{
 				
-				try{
+				
 					
 					if($this->model->checkLoginStatus() && $this->ShowForumView->didUserPressEditComment()){
 						echo "normal användare";
@@ -46,20 +51,23 @@
 					
 					
 						if($this->ShowForumView->didUserPressPostEditButtonComment() && $this->model->getLoggedInUser() && 
-						$this->db->checkIfIdIsManipulated($this->ShowForumView->getCommentId(), $this->model->getLoggedInUser())){
+						$this->db->checkIfIdIsManipulated($this->ShowForumView->getCommentId(), $this->model->getLoggedInUser()) && 
+				$this->db->sanitizeString($this->ShowForumView->getFormCommentEditText())){
 		
 							$EditCommentText = $this->ShowForumView->getFormCommentEditText();
 							
 							
 							$this->db->EditComment($EditCommentText, $this->ShowForumView->getCommentId(), $this->model->getLoggedInUser());
-							$newURL = "?topics";
-							header('Location: '.$newURL);
+							$this->ShowForumView->successfulEdit();
+							//$newURL = "?topics";
+							//header('Location: '.$newURL);
 							
 							//$topics = $this->db->fetchAllTopics();
 							//$this->ShowForumView->ShowAllEventsWithBandGrades($topics);
 							
 						}
 					}
+				}
 				}
 				catch(Exception $e){
 					
@@ -69,7 +77,7 @@
 				}
 				
 
-			}
+			
 			$this->doHTMLBody();
 				
 		}

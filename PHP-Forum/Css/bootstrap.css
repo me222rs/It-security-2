@@ -11,6 +11,8 @@ html {
       -ms-text-size-adjust: 100%;
 }
 body {
+	
+
   margin: 0;
 }
 article,
@@ -77,6 +79,9 @@ sup {
   font-size: 75%;
   line-height: 0;
   vertical-align: baseline;
+#comments{
+	margin-left: 10%;
+	background-color: #b0e0e6;
 }
 sup {
   top: -.5em;
@@ -3100,6 +3105,9 @@ fieldset[disabled] .btn-default.active {
   background-color: #286090;
   border-color: #204d74;
 }
+
+
+
 .btn-primary:active,
 .btn-primary.active,
 .open > .dropdown-toggle.btn-primary {
@@ -6581,4 +6589,5 @@ button.close {
     display: none !important;
   }
 }
+
 /*# sourceMappingURL=bootstrap.css.map */

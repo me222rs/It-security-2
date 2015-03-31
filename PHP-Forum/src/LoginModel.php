@@ -153,6 +153,27 @@ require_once 'DBDetails.php';
 			
 		}
 		
+		public function verifyChangeUserInput($inputUsername, $inputPassword)
+		{
+			echo "un=" . $inputUsername;
+			echo "pw=" . $inputPassword;
+			
+				//$sql = "SELECT * FROM `$this->dbTable` WHERE username= ? AND password= ?";
+			$db = $this -> connection();
+			$sql = "SELECT * FROM `$this->dbTable` WHERE username= ? AND password= ?";
+			$params = array($inputUsername, $inputPassword);
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
+			$rows = $query -> fetchColumn();
+			var_dump($rows);
+			if($rows) {
+				return TRUE;
+			}
+			else{
+				throw new Exception("Wrong username or password");
+			}
+		}
+		
 		// Kontrollerar anv�ndarinput gentemot de faktiska anv�ndaruppgifterna.
 		public function verifyUserInput($inputUsername, $inputPassword, $isCookieLogin = false)
 		{

@@ -33,12 +33,15 @@
 				//$this->ShowForumView->showNewTopicForm();
 				try{
 					if($this->ShowForumView->didUserPressPostTopic() && $this->db->sanitizeString($this->ShowForumView->getFormTopicName()) && 
-						$this->db->sanitizeString($this->ShowForumView->getFormTopicText())){
+						$this->db->sanitizeString($this->ShowForumView->getFormTopicText()) && $this->db->CheckLenghtTopicName($this->ShowForumView->getFormTopicName()) &&
+						$this->db->CheckLenghtTopicTextAndComment($this->ShowForumView->getFormTopicText())){
 						
 						$topicName = $this->ShowForumView->getFormTopicName();
 						$topicText = $this->ShowForumView->getFormTopicText();
+
 						
 						$this->db->createNewTopic($topicName, $topicText, $this->model->getLoggedInUser());
+						$this->ShowForumView->successfulEdit();
 					}
 				}catch(Exception $e){
 					$this->ShowForumView->showMessage($e->getMessage());

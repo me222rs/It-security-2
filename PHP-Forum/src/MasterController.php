@@ -10,6 +10,7 @@
 	require_once("EditTopicController.php");
 	require_once("DeleteCommentController.php");
 	require_once("EditCommentController.php");
+	require_once("ChangeCredentialsController.php");
 	
 	class MasterController{
 		private $model;
@@ -28,7 +29,7 @@
 			var_dump($this->view->didUserPressLogin());
 			//V�ljer vilken controller som ska anv�ndas beroende p� indata, t.ex. knappar och l�nkar.
 			if(!$this->view->didUserPressLogin() && !$this->forumView->didUserPressCreateNewTopic() && !$this->forumView->didUserPressTopic() && !$this->forumView->didUserPressDeleteTopic() && !$this->forumView->didUserPressEditTopic()
-				&& !$this->forumView->didUserPressDeleteComment() && !$this->forumView->didUserPressEditComment())
+				&& !$this->forumView->didUserPressDeleteComment() && !$this->forumView->didUserPressEditComment() && !$this->forumView->didUserPressChangePassword())
 			{
 				echo "Kommer in i if";
 				$loginC = new LoginController();
@@ -40,7 +41,7 @@
 				echo "Tryckt på visa alla ämnen";
 				
 				$topicController = new ShowTopicController();
-				$topicController->doHTMLBody();
+				//$topicController->doHTMLBody();
 				//$loginC = new LoginController();
 				//$htmlBodyLogin = $loginC->doShowTopic();
 				
@@ -84,7 +85,7 @@
 			elseif($this->forumView->didUserPressEditTopic() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() > 1){
 				
 				$topicController = new ShowTopicController();
-				$topicController->doHTMLBody();
+				//$topicController->doHTMLBody();
 			}
 
 			elseif($this->forumView->didUserPressDeleteComment() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() == 1){
@@ -115,6 +116,13 @@
 				$topicController = new EditCommentController();
 				
 			}
+			
+			elseif($this->forumView->didUserPressChangePassword() && $this->model->checkLoginStatus()){
+				
+				$changeCredentialsController = new ChangeCredentialsController();
+				
+			}
+			
 
 			
 			

@@ -79,6 +79,7 @@ require_once 'common/HTMLView.php';
 					
 					<a href='?create'>Create new topic</a>
 					<a href='?topics'>Show topics</a>
+					<a href='?changepw'>Change password</a>
 					
 					<h2>Forum</h2>
 					<p>Forum topic 1</p>
@@ -306,6 +307,7 @@ require_once 'common/HTMLView.php';
 		{
 			$this->showMessage("Inloggningen lyckades!");
 		}
+		
 		
 		// Visar login-meddelande f�r "H�ll mig inloggad"-funktionen.
 		public function successfulLoginAndCookieCreation()

@@ -18,7 +18,6 @@ require_once 'DBDetails.php';
 		}
 
 		public function didUserPressDeleteComment(){
-			echo "tryckt på delete comment";
 			return isset($_GET['deleteComment']);
 		}
 		
@@ -45,6 +44,48 @@ require_once 'DBDetails.php';
 		// {
 			// return isset($_GET['postEditTopic']);
 		// }
+		
+		
+									// <input type='text' name='currentPassword'><br>
+							// <input type='text' name='newPassword'><br>
+							// <input type='text' name='repeatNewPassword'><br>
+		public function didUserPressChangePassword()
+		{
+			echo "tryckte på ändra lösen";
+			return isset($_GET['changepw']);
+		}
+		public function didUserPressPostNewPassword(){
+			if(isset($_POST['sendNewPassword'])){
+				return TRUE;
+			}
+			return FALSE;
+		}
+		
+		//Change password
+		public function getCurrentPassword(){
+			if(isset($_POST['currentPassword']))
+			{
+				return md5("45gt4ad". $_POST['currentPassword'] . "55uio11");
+			}
+			return false;
+		}
+		
+		public function getNewPassword(){
+			if(isset($_POST['newPassword']) && $this->model->CheckReqPasswordLength($_POST['newPassword']))
+			{
+				return md5("45gt4ad". $_POST['newPassword'] . "55uio11");
+			}
+			return false;
+		}
+		
+		public function getNewRepeatPassword(){
+			if(isset($_POST['repeatNewPassword']) && $this->model->CheckReqPasswordLength($_POST['repeatNewPassword']))
+			{
+				return md5("45gt4ad". $_POST['repeatNewPassword'] . "55uio11");
+			}
+			return false;
+		}
+		
 		
 		public function didUserPressTopic()
 		{
@@ -149,6 +190,11 @@ require_once 'DBDetails.php';
 			return FALSE;
 		}
 		
+		public function successfulEdit()
+		{
+			$this->showMessage("Success");
+		}
+		
 		
 		
 		
@@ -178,7 +224,7 @@ require_once 'DBDetails.php';
 					
 					foreach($commentList->toArray() as $comment){
 						
-						$contentString .= "<fieldset class='fieldshowall'>";
+						$contentString .= "<fieldset id='comments'>";
 						$contentString .= "<a href='?deleteComment&commentId=".$comment->getCommentID()."'>Delete</a> ";
 						$contentString .= "<a href='?editComment&commentId=".$comment->getCommentID()."'>Edit</a><br>";
 						$contentString.= "".$comment->getComment()."<br>";
@@ -186,6 +232,7 @@ require_once 'DBDetails.php';
 						$contentString .= "</fieldset>";
 						
 					}
+					$contentString .= "$this->message";
 					$contentString .= "	<textarea type='text' name='CommentText'></textarea><br>
 						
 										<input type='submit' name='sendComment'  value='Send'>";	 
@@ -237,6 +284,28 @@ require_once 'DBDetails.php';
 			
 			$this->echoHTML($HTMLbody);
 		}
+		
+			public function ChangePasswordForm(){
+				$HTMLbody = "
+				<form method=post >
+						<fieldset>
+							$this->message
+							<a href='?login'>Back</a><br>
+							<legend>Change Password</legend>
+		
+							Current password: <br><input type='text' name='currentPassword'><br>
+							New password: <br><input type='text' name='newPassword'><br>
+							Repeat new password: <br><input type='text' name='repeatNewPassword'><br>
+						
+							<input type='submit' name='sendNewPassword'  value='Change'>
+						</fieldset>
+					</form>
+				
+				";
+			
+			$this->echoHTML($HTMLbody);
+		}
+		
 		
 		
 		//Visa skapa nytt ämne formulär

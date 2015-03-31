@@ -30,13 +30,17 @@
 
 					
 					
-					if($this->ShowForumView->didUserPressPostEditButtonTopic()){
+					if($this->ShowForumView->didUserPressPostEditButtonTopic() && $this->db->sanitizeString($this->ShowForumView->getFormTopicEditName()) &&
+						$this->db->sanitizeString($this->ShowForumView->getFormTopicEditText()) && 
+						$this->db->CheckLenghtTopicName($this->ShowForumView->getFormTopicEditName()) &&
+						$this->db->CheckLenghtTopicTextAndComment($this->ShowForumView->getFormTopicEditText())){
 						
 						$EditTopicName = $this->ShowForumView->getFormTopicEditName();
 						$EditTopicText = $this->ShowForumView->getFormTopicEditText();
 						$this->db->EditTopic($EditTopicName,$EditTopicText,$this->ShowForumView->getTopicId(), $this->model->getLoggedInUser());
-						$newURL = "?topics";
-						header('Location: '.$newURL);		
+						$this->ShowForumView->successfulEdit();
+						//$newURL = "?topics";
+						//header('Location: '.$newURL);		
 						
 					}
 					
@@ -46,11 +50,15 @@
 				elseif($this->model->checkLoginStatus() && $this->ShowForumView->didUserPressEditTopic())
 				{
 					
-					if($this->ShowForumView->didUserPressPostEditButtonTopic() && $this->db->checkIfIdIsManipulatedTopic($this->ShowForumView->getTopicId(), $this->model->getLoggedInUser())){
+					if($this->ShowForumView->didUserPressPostEditButtonTopic() && $this->db->checkIfIdIsManipulatedTopic($this->ShowForumView->getTopicId(), $this->model->getLoggedInUser()) && 
+						$this->db->sanitizeString($this->ShowForumView->getFormTopicEditName()) && $this->db->sanitizeString($this->ShowForumView->getFormTopicEditText()) && 
+						$this->db->CheckLenghtTopicName($this->ShowForumView->getFormTopicEditName()) &&
+						$this->db->CheckLenghtTopicTextAndComment($this->ShowForumView->getFormTopicEditText())){
 
 						$EditTopicName = $this->ShowForumView->getFormTopicEditName();
 						$EditTopicText = $this->ShowForumView->getFormTopicEditText();
 						$this->db->EditTopic($EditTopicName,$EditTopicText,$this->ShowForumView->getTopicId(), $this->model->getLoggedInUser());
+						$this->ShowForumView->successfulEdit();
 						
 
 					}

@@ -46,6 +46,10 @@ require_once("CommentList.php");
 		private static $commentPoster = "commentPoster";
 		
 		
+		private static $username = "username";
+		private static $password = "password";
+		
+		
 		private static $User = "User";
 		private static $Action = "Action";
 		private static $Timestamp = "Timestamp";
@@ -60,8 +64,8 @@ require_once("CommentList.php");
 		private static $id = "id";
 		private static $grade = "grade";
 		private static $eventband = "eventband";
-		private static $username = "username";
-		private static $password = "password";
+		//private static $username = "username";
+		//private static $password = "password";
 		private static $rating = "rating";
 		private static $tblUser = "user";
 		private static $tblEvent = "event";
@@ -82,12 +86,31 @@ require_once("CommentList.php");
 		
 		public function sanitizeString($string){
 			//$sanitizedString = mysqli_real_escape_string($string);
-			if(!preg_match('/^[A-Za-z][A-Za-z0-9]{1,31}$/', $string))
+			if(!preg_match('/^[a-zA-Z0-9 .,!?-]+$/', $string))
 				{
 					throw new Exception("Input contains invalid characters!");
 				}
 			return true;
+		}
+		
+		public function CheckLenghtTopicName($topicName){
+			echo $topicName;
+			if(mb_strlen($topicName) < 1 || mb_strlen($topicName) > 39){
+				// Kasta undantag.
+				echo "teeeeeeeeeeeeeest";
+				throw new Exception("Topic name must be at least 1 character and less than 40 characters");
+				
+			}
+			return true;
 			
+		}
+		public function CheckLenghtTopicTextAndComment($topicTextAndComment){
+			if(mb_strlen($topicTextAndComment) < 1 || mb_strlen($topicTextAndComment) > 300){
+				// Kasta undantag.
+				throw new Exception("Text must be less than 300 characters and contain at least 1 character");
+				
+			}
+			return true;
 			
 		}
 		
@@ -101,6 +124,27 @@ require_once("CommentList.php");
 				
 			return $this->dbConnection;
 		}
+		
+		
+		public function ChangePassword($user, $oldPassword, $newPassword)
+		{
+			try{
+				
+			$db = $this -> connection();
+			$this->dbTable = self::$tblLogin;
+			$sql = "UPDATE $this->dbTable SET ". self::$password ."=? WHERE ". self::$username ."=?";
+			$params = array($newPassword, $user);
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
+			
+			//$this->LogAction($user, "Edited comment with id " . $commentID . ". Changed to " . "text:" . $editCommentText);
+					
+			} catch (\PDOException $e) {
+					die('An unknown error have occured.');
+			}
+        
+		}
+		
 		
 		public function checkIfIdIsManipulated($pickedId, $loggedinUser)
 		{
