@@ -36,7 +36,7 @@ require_once 'DBDetails.php';
 		public function CheckBothRegInput($registerUsername,$registerPassword){
 			if(mb_strlen($registerUsername) < 3 && mb_strlen($registerPassword) < 6){
 				// Kasta undantag.
-				throw new Exception("Anv�ndarnamnet har f�r f� tecken. Minst 3 tecken<br>L�senordet har f�r f� tecken. Minst 6 tecken");
+				throw new Exception("Username must have at least 3 characters and a password with at least 6 characters.");
 				
 			}
 			return true;
@@ -44,7 +44,7 @@ require_once 'DBDetails.php';
 		public function CheckRegUsernameLength($registerUsername){
 			if(mb_strlen($registerUsername) < 3){
 				// Kasta undantag.
-				throw new Exception("Anv�ndarnamnet har f�r f� tecken. Minst 3 tecken");
+				throw new Exception("Username must have at least 3 characters.");
 				
 			}
 			return true;
@@ -53,7 +53,7 @@ require_once 'DBDetails.php';
 		public function CheckReqPasswordLength($registerPassword){
 			if(mb_strlen($registerPassword) < 6){
 				// Kasta undantag.
-				throw new Exception("L�senordet har f�r f� tecken. Minst 6 tecken");
+				throw new Exception("Password must have at least 6 characters");
 				
 				
 			}
@@ -64,7 +64,7 @@ require_once 'DBDetails.php';
 		public function ComparePasswordRepPassword($registerPassword, $repeatPassword){
 				if($registerPassword !== $repeatPassword)
 				{
-					throw new Exception("L�senorden matchar inte");
+					throw new Exception("Passwords do not match!");
 				}
 				return true;
 		}
@@ -117,13 +117,13 @@ require_once 'DBDetails.php';
 		}
 		public function UsernameExistInDB(){
 		
-				throw new Exception("Anv�ndarnamnet �r redan upptaget");
+				throw new Exception("Username is already taken");
 		}
 		public function ValidateUsername($inputuser){
 			
 			if(!preg_match('/^[A-Za-z][A-Za-z0-9]{1,31}$/', $inputuser))
 			{
-				throw new Exception("Anv�ndarnamnet inneh�ller ogiltiga tecken");
+				throw new Exception("Username contains invalid characters");
 			}
 			return true;
 		}
@@ -139,6 +139,17 @@ require_once 'DBDetails.php';
 		}
 		
 		public function getUserRole(){
+			
+		}
+		
+		public function sanitizeString($string){
+			//$sanitizedString = mysqli_real_escape_string($string);
+			if(!preg_match('/^[A-Za-z][A-Za-z0-9]{1,31}$/', $string))
+				{
+					throw new Exception("Input contains invalid characters!");
+				}
+			return true;
+			
 			
 		}
 		
@@ -177,15 +188,17 @@ require_once 'DBDetails.php';
 			if($inputUsername == "" || $inputUsername === NULL)
 			{
 				// Kasta undantag.
-				throw new Exception("Anv�ndarnamn saknas");
+				throw new Exception("Username missing");
 			}
 			
 			if($inputPassword == "" || $inputPassword === NULL || $inputPassword === md5(""))
 			{
 				// Kasta undantag.
-				throw new Exception("L�senord saknas");
+				throw new Exception("Password missing");
 			}
-			
+			if($this->sanitizeString($inputUsername)){
+				//echo "Ogiltigt tecken";
+			}
 			//var_dump($inputUsername);
 			//var_dump($inputPassword);
 			
@@ -246,12 +259,12 @@ require_once 'DBDetails.php';
 							
 							// Kasta undantag.
 							$this->db->LogAction($inputUsername, "User failed to log in");
-							throw new Exception("Felaktigt anv�ndarnamn och/eller l�senord");
+							throw new Exception("Wrong username or password");
 						}
 					}
 					else
 					{
-						throw new Exception("Fel captcha kod");
+						throw new Exception("Wrong captcha kod");
 					}
 				
 				}
@@ -295,7 +308,7 @@ require_once 'DBDetails.php';
 		public function cookieException()
 		{
 			// Kasta cookie-felmeddelande.
-			throw new Exception("Felaktig information i cookie");
+			throw new Exception("Invalid cookie information");
 		}
 		
 		// H�mtar anv�ndarnamnet fr�n sessionen.

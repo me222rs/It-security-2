@@ -78,6 +78,20 @@ require_once("CommentList.php");
 		private static $colrating = "rating";
 		private static $ID = "ID";
 		//returnerar anslutningssträngen.
+		
+		
+		public function sanitizeString($string){
+			//$sanitizedString = mysqli_real_escape_string($string);
+			if(!preg_match('/^[A-Za-z][A-Za-z0-9]{1,31}$/', $string))
+				{
+					throw new Exception("Input contains invalid characters!");
+				}
+			return true;
+			
+			
+		}
+		
+		
 		protected function connection() 
 		{
 			if ($this->dbConnection == NULL)

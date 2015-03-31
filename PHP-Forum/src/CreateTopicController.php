@@ -15,6 +15,7 @@
 			$this->model = new LoginModel($userAgent);
 			$this->ShowForumView = new ForumView($this->model);
 			$this->db = new DBDetails();
+			$this->doControll();
 
 		}
 		
@@ -25,26 +26,36 @@
 		
 		
 		//anropar vilken vy som ska visas.
-		public function doHTMLBody()
+		public function doControll()
 		{
 			if($this->model->checkLoginStatus() && $this->ShowForumView->didUserPressCreateNewTopic()){
 
-				$this->ShowForumView->showNewTopicForm();
-				
-				if($this->ShowForumView->didUserPressPostTopic()){
-					$topicName = $this->ShowForumView->getFormTopicName();
-					$topicText = $this->ShowForumView->getFormTopicText();
-					
-					$this->db->createNewTopic($topicName, $topicText, $this->model->getLoggedInUser());
+				//$this->ShowForumView->showNewTopicForm();
+				try{
+					if($this->ShowForumView->didUserPressPostTopic() && $this->db->sanitizeString($this->ShowForumView->getFormTopicName()) && 
+						$this->db->sanitizeString($this->ShowForumView->getFormTopicText())){
+						
+						$topicName = $this->ShowForumView->getFormTopicName();
+						$topicText = $this->ShowForumView->getFormTopicText();
+						
+						$this->db->createNewTopic($topicName, $topicText, $this->model->getLoggedInUser());
+					}
+				}catch(Exception $e){
+					$this->ShowForumView->showMessage($e->getMessage());
 				}
-				//När topic har tagits bort så visas alla topics
-				//$topics = $this->db->fetchAllTopics();
-				//$this->ShowForumView->ShowAllEventsWithBandGrades($topics);
-
+				
+				
+				$this->doHTMLBody();
 				
 				
 			}
 
+		}
+		public function doHTMLBody(){
+			if($this->model->checkLoginStatus() && $this->ShowForumView->didUserPressCreateNewTopic()){
+
+				$this->ShowForumView->showNewTopicForm();
+			}
 		}
 
 	}

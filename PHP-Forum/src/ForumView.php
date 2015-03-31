@@ -244,6 +244,7 @@ require_once 'DBDetails.php';
 				$HTMLbody = "
 				<form method=post >
 						<fieldset>
+							$this->message
 							<a href='?login'>Tillbaka</a><br>
 							<legend>Create a new topic</legend>
 							Topic name: <br>

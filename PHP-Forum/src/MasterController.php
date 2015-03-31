@@ -66,7 +66,7 @@
 			elseif($this->forumView->didUserPressCreateNewTopic() && $this->model->checkLoginStatus()){
 				echo "Tryckt på skapa nytt ämne";
 				$topicController = new CreateTopicController();
-				$topicController->doHTMLBody();
+				//$topicController->doHTMLBody();
 				
 			}
 			
