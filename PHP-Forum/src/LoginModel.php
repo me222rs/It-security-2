@@ -14,7 +14,7 @@ require_once 'DBDetails.php';
 		protected $dbConnstring = 'mysql:host=127.0.0.1;dbname=login';
 		protected $dbConnection;
 		protected $dbTable = "login";
-		protected $dbTabletopic = "topics";
+		
 		
 		public function __construct($userAgent)
 		{
@@ -134,13 +134,6 @@ require_once 'DBDetails.php';
 			return $this->loginsuccess;
 		}
 		
-		public function getAllTopics(){
-			
-		}
-		
-		public function getUserRole(){
-			
-		}
 		
 		public function sanitizeString($string){
 			//$sanitizedString = mysqli_real_escape_string($string);
@@ -155,17 +148,14 @@ require_once 'DBDetails.php';
 		
 		public function verifyChangeUserInput($inputUsername, $inputPassword)
 		{
-			echo "un=" . $inputUsername;
-			echo "pw=" . $inputPassword;
-			
-				//$sql = "SELECT * FROM `$this->dbTable` WHERE username= ? AND password= ?";
+				
 			$db = $this -> connection();
 			$sql = "SELECT * FROM `$this->dbTable` WHERE username= ? AND password= ?";
 			$params = array($inputUsername, $inputPassword);
 			$query = $db -> prepare($sql);
 			$query -> execute($params);
 			$rows = $query -> fetchColumn();
-			var_dump($rows);
+			
 			if($rows) {
 				return TRUE;
 			}
@@ -177,8 +167,8 @@ require_once 'DBDetails.php';
 		// Kontrollerar anv�ndarinput gentemot de faktiska anv�ndaruppgifterna.
 		public function verifyUserInput($inputUsername, $inputPassword, $isCookieLogin = false)
 		{
-			//$encryptedInputPassword = md5("45gt4ad" . $inputPassword . "55uio11");
-			var_dump($inputPassword);
+			
+			
 			$db = $this -> connection();
 			$sql = "SELECT `username` FROM `$this->dbTable` WHERE `username` = ?";
 			$params = array($inputUsername);
@@ -190,15 +180,15 @@ require_once 'DBDetails.php';
 			if ($result) {
 				$result['username'];
 				$DB_Username = $result['username'];
-
 			}
+
 			$db = $this -> connection();
 			$sql = "SELECT `password` FROM `$this->dbTable` WHERE `password` = ?";
 			$params = array($inputPassword);
 			$query = $db -> prepare($sql);
 			$query -> execute($params);
 			$result = $query -> fetch();
-			//echo "$result = ";
+			
 			
 			
 			if ($result) {
@@ -218,10 +208,9 @@ require_once 'DBDetails.php';
 				throw new Exception("Password missing");
 			}
 			if($this->sanitizeString($inputUsername)){
-				//echo "Ogiltigt tecken";
+				
 			}
-			//var_dump($inputUsername);
-			//var_dump($inputPassword);
+			
 			
 			$msg='';
 				if($_SERVER["REQUEST_METHOD"] == "POST")
@@ -239,12 +228,10 @@ require_once 'DBDetails.php';
 					$url=$google_url."?secret=".$secret."&response=".$recaptcha."&remoteip=".$ip;
 					$res=getCurlData($url);
 					$res= json_decode($res, true);
-					//reCaptcha success check 
-					var_dump($res);
 					
 					if($res['success'] == NULL)
 					{
-						echo "QQQQQQQQQQQQQQQQQQQQ";
+						
 						// Kontrollerar ifall inparametrarna matchar de faktiska anv�ndaruppgifterna.
 						if($inputUsername == $DB_Username && $inputPassword == $DB_Password)
 						{
@@ -265,8 +252,6 @@ require_once 'DBDetails.php';
 							
 							// Sparar useragent i sessionen.
 							$_SESSION['sessionUserAgent'] = $this->sessionUserAgent;
-							echo "Roll = ";
-							var_dump($_SESSION['role']);
 							return true;
 						}
 						else
@@ -296,34 +281,6 @@ require_once 'DBDetails.php';
 				
 				}
 			
-			
-			
-			
-			
-			// // Kontrollerar ifall inparametrarna matchar de faktiska anv�ndaruppgifterna.
-			// if($inputUsername == $DB_Username && $inputPassword == $DB_Password)
-			// {
-				// // Inloggningsstatus och anv�ndarnamn sparas i sessionen.
-				// $_SESSION['loggedIn'] = true;
-				// $_SESSION['loggedInUser'] = $inputUsername;
-// 				
-				// // Sparar useragent i sessionen.
-				// $_SESSION['sessionUserAgent'] = $this->sessionUserAgent;
-// 								
-				// return true;
-			// }
-			// else
-			// {
-				// // �r det en inloggning med cookies...
-				// if($isCookieLogin)
-				// {
-					// // Kasta cookie-felmeddelande.
-					// $this->cookieException();
-				// }
-// 				
-				// // Kasta undantag.
-				// throw new Exception("Felaktigt anv�ndarnamn och/eller l�senord");
-			// }
 		}
 		
 		public function cookieException()

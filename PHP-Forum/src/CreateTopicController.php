@@ -19,18 +19,12 @@
 
 		}
 		
-		// public function doCreateNewTopic(){
-			// $this->ShowForumView->didUserPressPostTopic();
-// 			
-		// }
 		
-		
-		//anropar vilken vy som ska visas.
 		public function doControll()
 		{
 			if($this->model->checkLoginStatus() && $this->ShowForumView->didUserPressCreateNewTopic()){
 
-				//$this->ShowForumView->showNewTopicForm();
+				
 				try{
 					if($this->ShowForumView->didUserPressPostTopic() && $this->db->sanitizeString($this->ShowForumView->getFormTopicName()) && 
 						$this->db->sanitizeString($this->ShowForumView->getFormTopicText()) && $this->db->CheckLenghtTopicName($this->ShowForumView->getFormTopicName()) &&

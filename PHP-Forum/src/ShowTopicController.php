@@ -16,24 +16,23 @@
 			$this->model = new LoginModel($userAgent);
 			$this->ShowForumView = new ForumView($this->model);
 			$this->db = new DBDetails();
-			//$this->doHTMLBody();
+			
 			$this->doControll();
 		}
-		//anropar vilken vy som ska visas.
+		
 		public function doControll()
 		{
 			try
 			{
-			if($this->ShowForumView->didUserPressThread()){
-				echo "Visa en tråd";
-				//$this->ShowForumView->getTopicId();
+				if($this->ShowForumView->didUserPressThread() && $this->model->checkLoginStatus()){
+				
 				
 				//Hämta rad i databasen som har samma id som man klickade på
 				//Hämta rader i databasen med kommentarer som tillhör id
 				//Skicka med dessa till showtopics
 				
 				
-				if($this->ShowForumView->didUserPressPostComment() && $this->db->sanitizeString($this->ShowForumView->getFormCommentText())){
+				if($this->ShowForumView->didUserPressPostComment() && $this->db->sanitizeString($this->ShowForumView->getFormCommentText()) && $this->model->checkLoginStatus()){
 					//$topicName = $this->ShowForumView->getFormTopicName();
 					$commentText = $this->ShowForumView->getFormCommentText();
 					
@@ -53,22 +52,24 @@
 
 		public function doHTMLBody()
 		{
-			if($this->ShowForumView->didUserPressThread()){
-				echo "1";
+			if($this->ShowForumView->didUserPressThread() && $this->model->checkLoginStatus()){
+				
 				$topics = $this->db->fetchTopic($this->ShowForumView->getTopicId());
 				$comments = $this->db->fetchAllComments($this->ShowForumView->getTopicId());
 				$this->ShowForumView->showTopics($topics, $comments);
 				
 				if($this->ShowForumView->didUserPressPostComment()){
 					
-					//$newURL = "?topics&topicId=" . $this->ShowForumView->getTopicId();
-					//header('Location: '.$newURL);
+					
 				}
 			}
 			else{
-				echo "Kommer in i doHTMLBody";
-				$topics = $this->db->fetchAllTopics();
-				$this->ShowForumView->ShowAllEventsWithBandGrades($topics);
+				
+				if($this->model->checkLoginStatus())
+				{
+					$topics = $this->db->fetchAllTopics();
+					$this->ShowForumView->ShowAllTopics($topics);
+				}
 			}
 		}
 

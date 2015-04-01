@@ -20,15 +20,15 @@
 		//anropar vilken vy som ska visas.
 		public function doHTMLBody()
 		{
-			if($this->ShowForumView->didUserPressDeleteTopic()){
+			if($this->ShowForumView->didUserPressDeleteTopic() && $this->model->checkLoginStatus()){
 
 				//Tar bort en specifik topic med hjälp av ett id
 				$this->db->DeleteTopic($this->ShowForumView->getTopicId(), $this->model->getLoggedInUser());
-				//$comments = $this->db->fetchAllComments();
+				
 
 				//När topic har tagits bort så visas alla topics
 				$topics = $this->db->fetchAllTopics();
-				$this->ShowForumView->ShowAllEventsWithBandGrades($topics);
+				$this->ShowForumView->ShowAllTopics($topics);
 
 				
 				

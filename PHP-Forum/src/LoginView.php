@@ -64,12 +64,7 @@ require_once 'common/HTMLView.php';
 		// S�tter body-inneh�llet.
 		public function showLoginPage()
 		{
-			// Variabler
-			$weekDay = ucfirst(utf8_encode(strftime("%A"))); // Hittar veckodagen, till�ter �,�,� och g�r den f�rsta bokstaven stor.
-			$month = ucfirst(strftime("%B")); // Hittar m�naden och g�r den f�rsta bokstaven stor.
-			$year = strftime("%Y");
-			$time = strftime("%H:%M:%S");
-			$format = '%e'; // Fixar formatet s� att datumet anpassas f�r olika platformar. L�sning hittade p� http://php.net/manual/en/function.strftime.php
+			
 			// Kontrollerar inloggningsstatus. �r anv�ndaren inloggad...	
 			if($this->model->checkLoginStatus())
 			{				
@@ -80,68 +75,51 @@ require_once 'common/HTMLView.php';
 					<a href='?create'>Create new topic</a>
 					<a href='?topics'>Show topics</a>
 					<a href='?changepw'>Change password</a>
-					
-					<h2>Forum</h2>
-					<p>Forum topic 1</p>
-					<p>Forum topic 2</p>
-					<p>Forum topic 3</p>
-					
-					<p><a href='?logout'>Logga ut</a></p>";
-				$this->loginStatus = $this->model->getLoggedInUser() . " �r inloggad";
+					<p><a href='?logout'>Logout</a></p>";
+				$this->loginStatus = $this->model->getLoggedInUser() . " Is logged in";
 			}
 			else 
 			{
 				
-				
 					// ...annars visas inloggningssidan.
-					$this->loginStatus = "Ej inloggad";
+					$this->loginStatus = "Not logged in";
 					$contentString = 
 					"<form id='loginForm' method=post action='?login'>
 						<fieldset>
-							<legend>Login - Skriv in anv�ndarnamn och l�senord</legend>
+							<legend>Login - Write username and password</legend>
 							$this->message
-							Namn: <input type='text' name='$this->username' value='" . $this->getInputUsername() . "'>
-							L�senord: <input type='password' name='$this->password'> 
-							<div class='g-recaptcha' data-sitekey='6LdK9AMTAAAAABnYjmV2ZlSrdicAtpcqsxF7mX_M'></div>
-
-							<input type='checkbox' name='$this->checkbox' value='checked'>H�ll mig inloggad:
-							<button type='submit' name='button' form='loginForm' value='Submit'>Logga in</button>
+							Name: <input type='text' name='$this->username' value='" . $this->getInputUsername() . "'>
+							Password: <input type='password' name='$this->password'><br> 
+							<div class='g-recaptcha' data-sitekey='6LdK9AMTAAAAABnYjmV2ZlSrdicAtpcqsxF7mX_M'></div><br>
+							<button type='submit' name='button' form='loginForm' value='Submit'>Login</button>
 						</fieldset>
 					</form>";
 				
 			}
 			
-			// Kontrollerar ifall windowsformatet anv�nds och ers�tter %e med en fungerande del.
-			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN')
-			{
-    			$format = preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
-			}
+			
 			
 			$HTMLbody = "
-				<h1>Laboration 2 - ek222mw</h1>
+				<div><h1>It Security</h1>
 				<h2>$this->loginStatus</h2>
-				<p><a href='?register'>Registrera ny anv�ndare</a></p>
-				$contentString
-				" . strftime('' . $weekDay . ', den ' . $format . ' '. $month . ' �r ' . $year . '. Klockan �r [' . $time . ']') . ".";
+				<p><a href='?register'>Register new user</a></p>
+				$contentString</div>
+				";
 			if($this->model->checkLoginStatus())
 			{
-			$HTMLbody = "
-				<h1>Laboration 2 - ek222mw</h1>
+				$HTMLbody = "
+				<div>
+				<h1>It Security</h1>
 				<h2>$this->loginStatus</h2>
-				
-				$contentString
-				" . strftime('' . $weekDay . ', den ' . $format . ' '. $month . ' �r ' . $year . '. Klockan �r [' . $time . ']') . ".";
+				$contentString</div>
+				";
 			}
+
 			$this->echoHTML($HTMLbody);
 		}
 		public function showLoginPageWithRegname()
 		{
-			// Variabler
-			$weekDay = ucfirst(utf8_encode(strftime("%A"))); // Hittar veckodagen, till�ter �,�,� och g�r den f�rsta bokstaven stor.
-			$month = ucfirst(strftime("%B")); // Hittar m�naden och g�r den f�rsta bokstaven stor.
-			$year = strftime("%Y");
-			$time = strftime("%H:%M:%S");
-			$format = '%e'; // Fixar formatet s� att datumet anpassas f�r olika platformar. L�sning hittade p� http://php.net/manual/en/function.strftime.php
+			
 			
 			// Kontrollerar inloggningsstatus. �r anv�ndaren inloggad...	
 			if($this->model->checkLoginStatus())
@@ -149,50 +127,40 @@ require_once 'common/HTMLView.php';
 				// ...visa anv�ndarsidan...
 				$contentString = "
 					$this->message
-					<p><a href='?logout'>Logga ut</a></p>";
-				$this->loginStatus = $this->model->getLoggedInUser() . " �r inloggad";
+					<p><a href='?logout'>Logout</a></p>";
+				$this->loginStatus = $this->model->getLoggedInUser() . " is logged in";
 			}
 			else 
 			{
 					// ...annars visas inloggningssidan.
-					$this->loginStatus = "Ej inloggad";
+					$this->loginStatus = "Not logged in";
 					$contentString = 
 					"<form id='loginForm' method=post action='?login'>
 						<fieldset>
-							<legend>Login - Skriv in anv�ndarnamn och l�senord</legend>
+							<legend>Login - Write username and password</legend>
 							$this->message
-							Namn: <input type='text' name='$this->username' value='" . $this->getRegisterUsername() . "'>
-							L�senord: <input type='password' name='$this->password'>
-							<div class='g-recaptcha' data-sitekey='6LdK9AMTAAAAABnYjmV2ZlSrdicAtpcqsxF7mX_M'></div>
-							<input type='checkbox' name='$this->checkbox' value='checked'>H�ll mig inloggad:
-							<button type='submit' name='button' form='loginForm' value='Submit'>Logga in</button>
+							Name: <input type='text' name='$this->username' value='" . $this->getRegisterUsername() . "'>
+							Password: <input type='password' name='$this->password'><br><br>
+							<div class='g-recaptcha' data-sitekey='6LdK9AMTAAAAABnYjmV2ZlSrdicAtpcqsxF7mX_M'></div><br>
+							<button type='submit' name='button' form='loginForm' value='Submit'>Login</button>
 						</fieldset>
 					</form>";
 				
 			}
 			
-			// Kontrollerar ifall windowsformatet anv�nds och ers�tter %e med en fungerande del.
-			if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN')
-			{
-    			$format = preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
-			}
 			
 			$HTMLbody = "
-				<h1>Laboration 2 - ek222mw</h1>
+				<div>
+				<h1>It Security</h1>
 				<h2>$this->loginStatus</h2>
-				<p><a href='?register'>Registrera ny anv�ndare</a></p>
-				$contentString
-				" . strftime('' . $weekDay . ', den ' . $format . ' '. $month . ' �r ' . $year . '. Klockan �r [' . $time . ']') . ".";
+				<p><a href='?register'>Register new user</a></p>
+				$contentString</div>
+				";
 			
 			$this->echoHTML($HTMLbody);
 		}
 		public function showRegisterPage(){
-			// Variabler
-			$weekDay = ucfirst(utf8_encode(strftime("%A"))); // Hittar veckodagen, till�ter �,�,� och g�r den f�rsta bokstaven stor.
-			$month = ucfirst(strftime("%B")); // Hittar m�naden och g�r den f�rsta bokstaven stor.
-			$year = strftime("%Y");
-			$time = strftime("%H:%M:%S");
-			$format = '%e'; // Fixar formatet s� att datumet anpassas f�r olika platformar. L�sning hittade p� http://php.net/manual/en/function.strftime.php
+			
 			
 			// Kontrollerar inloggningsstatus. �r anv�ndaren inloggad...	
 			if($this->model->checkLoginStatus())
@@ -201,39 +169,33 @@ require_once 'common/HTMLView.php';
 				// ...visa anv�ndarsidan...
 				$contentString = "
 					$this->message
-					<p><a href='?logout'>Logga ut</a></p>";
-				$this->loginStatus = $this->model->getLoggedInUser() . " �r inloggad";
+					<p><a href='?logout'>Logout</a></p>";
+				$this->loginStatus = $this->model->getLoggedInUser() . " is logged in";
 			}else{
 			// visa registreringssidan.
 				
 					 
-					$this->loginStatus = "Ej inloggad, Registrerar anv�ndare";
+					$this->loginStatus = "Not logged in, register new user";
 					$contentString = 
 					 "
-					<form method=post >
+					<form class='loginForm' method=post >
 						<fieldset>
-							<legend>Registrera ny anv�ndare - Skriv in anv�ndarnamn och l�senord</legend>
+							<legend>Register new user - Write username and password</legend>
 							$this->message
-							Namn: <input type='text' name='createusername' value='". strip_tags($_POST['createusername']) ."'><br>
-							L�senord: <input type='password' name='createpassword'><br>
-							Repetera L�senord: <input type='password' name='repeatpassword'><br>
-							Skicka: <input type='submit' name='createuserbutton'  value='Registrera'>
+							Name:<br> <input type='text' name='createusername' value='". strip_tags($_POST['createusername']) ."'><br>
+							Password:<br> <input type='password' name='createpassword'><br>
+							Repeat Password:<br> <input type='password' name='repeatpassword'><br>
+							<input type='submit' name='createuserbutton'  value='Register'>
 						</fieldset>
 					</form>";
-					if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN')
-					{
-    					$format = preg_replace('#(?<!%)((?:%%)*)%e#', '\1%#d', $format);
-					}
 					$HTMLbody = "
-				<h1>Laboration 2 - ek222mw</h1>
-				
-				<p><a href='?login'>Tillbaka</a></p>
-				
-				<h2>$this->loginStatus</h2>
-				
-				$contentString<br>
-				" . strftime('' . $weekDay . ', den ' . $format . ' '. $month . ' �r ' . $year . '. Klockan �r [' . $time . ']') . ".";
-				$this->echoHTML($HTMLbody);
+					<div>	
+					<h1>It Security</h1>
+					<h2>$this->loginStatus</h2>
+					<p><a href='?login'>Back</a></p>
+					$contentString<br></div>
+					";
+					$this->echoHTML($HTMLbody);
 			}
 				
 		}
@@ -272,7 +234,7 @@ require_once 'common/HTMLView.php';
 			$this->model->verifyUserInput($_COOKIE["Username"], $this->model->decodePassword($_COOKIE["Password"]), true);
 			
 			// Visa r�ttmeddelande.
-			$this->showMessage("Inloggningen lyckades via cookies");
+			$this->showMessage("Login succeed");
 		}
 		
 		// Tar bort alla cookies.
@@ -305,24 +267,24 @@ require_once 'common/HTMLView.php';
 		// Visar login-meddelande.
 		public function successfulLogin()
 		{
-			$this->showMessage("Inloggningen lyckades!");
+			$this->showMessage("Login succeed!");
 		}
 		
 		
 		// Visar login-meddelande f�r "H�ll mig inloggad"-funktionen.
 		public function successfulLoginAndCookieCreation()
 		{
-			$this->showMessage("Inloggningen lyckades och vi kommer ih�g dig n�sta g�ng");
+			$this->showMessage("Login succeed, we remember you next time");
 		}
 		
 		// Visar logout-meddelande.
 		public function successfulLogout()
 		{
-			$this->showMessage("Du har nu loggat ut");
+			$this->showMessage("You have logged out");
 		}
 		public function successfulRegistration()
 		{
-			$this->showMessage("Registrering av ny anv�ndare lyckades");
+			$this->showMessage("Registering new user succeed");
 		}
 		
 	}

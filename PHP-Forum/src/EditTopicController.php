@@ -38,9 +38,7 @@
 						$EditTopicName = $this->ShowForumView->getFormTopicEditName();
 						$EditTopicText = $this->ShowForumView->getFormTopicEditText();
 						$this->db->EditTopic($EditTopicName,$EditTopicText,$this->ShowForumView->getTopicId(), $this->model->getLoggedInUser());
-						$this->ShowForumView->successfulEdit();
-						//$newURL = "?topics";
-						//header('Location: '.$newURL);		
+						$this->ShowForumView->successfulEdit();	
 						
 					}
 					

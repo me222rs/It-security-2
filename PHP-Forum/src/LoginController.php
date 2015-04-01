@@ -62,7 +62,7 @@
 			}
 			if($this->model->checkLoginStatus() && $this->view->searchForCookies())
 			{
-				echo "Detta körs";
+				
 				$this->view->showLoginPage();
 			}
 			if($this->model->checkLoginStatus() && !$this->view->searchForCookies() && !$this->forumView->didUserPressCreateNewTopic() && !$this->forumView->didUserPressTopic())
@@ -77,7 +77,7 @@
 		{
 			if(!$this->view->didUserPressRegister() && !$this->view->didUserPressLogin() && !$this->model->checkLoginStatus())
 			{
-				echo "12345";
+				
 				$this->view->showLoginPage();
 			}
 			
