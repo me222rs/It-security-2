@@ -148,20 +148,52 @@ require_once 'DBDetails.php';
 		
 		public function verifyChangeUserInput($inputUsername, $inputPassword)
 		{
-				
-			$db = $this -> connection();
-			$sql = "SELECT * FROM `$this->dbTable` WHERE username= ? AND password= ?";
-			$params = array($inputUsername, $inputPassword);
-			$query = $db -> prepare($sql);
-			$query -> execute($params);
-			$rows = $query -> fetchColumn();
+			if($_SERVER["REQUEST_METHOD"] == "POST")
+				{
+					
+					$recaptcha=$_POST['g-recaptcha-response'];
+					if(!empty($recaptcha))
+					
+				{
+					
+					include("src/getCurlData.php");
+					$google_url="https://www.google.com/recaptcha/api/siteverify";
+					$secret='6LdK9AMTAAAAAKTOAvNLeThud6yglIw8K5g62yTx';
+					$ip=$_SERVER['REMOTE_ADDR'];
+					$url=$google_url."?secret=".$secret."&response=".$recaptcha."&remoteip=".$ip;
+					$res=getCurlData($url);
+					$res= json_decode($res, true);
+					
+					if($res['success'] == NULL)
+					{
 			
-			if($rows) {
-				return TRUE;
-			}
-			else{
-				throw new Exception("Wrong username or password");
-			}
+						
+						$db = $this -> connection();
+						$sql = "SELECT * FROM `$this->dbTable` WHERE username= ? AND password= ?";
+						$params = array($inputUsername, $inputPassword);
+						$query = $db -> prepare($sql);
+						$query -> execute($params);
+						$rows = $query -> fetchColumn();
+						
+						if($rows) {
+							return TRUE;
+						}
+						else{
+							throw new Exception("Wrong username or password");
+						}
+					}
+					else
+					{
+						throw new Exception("Wrong captcha kod");
+					}
+				
+				}
+				else
+				{
+				throw new Exception("Wrong Captcha");
+				}
+				}
+				
 		}
 		
 		// Kontrollerar anv�ndarinput gentemot de faktiska anv�ndaruppgifterna.

@@ -31,6 +31,7 @@
 								if($this->model->ComparePasswordRepPassword($this->ShowForumView->getNewPassword(),$this->ShowForumView->getNewRepeatPassword())){
 								
 									$this->db->ChangePassword($this->model->getLoggedInUser(), $this->ShowForumView->getCurrentPassword(), $this->ShowForumView->getNewPassword());
+									$this->ShowForumView->successfulPasswordChange();
 								}
 								
 								

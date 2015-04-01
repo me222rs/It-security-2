@@ -137,7 +137,8 @@ span{
 
 p{
 	border: 0;
-	font-family:verdana; 
+	font-family:verdana;
+	margin-left:10%; 
 }
 
 h2{
@@ -292,6 +293,7 @@ select{
 	
   
 }
+
 .commentstext{
 	height:15%;
 	margin-left:10%;

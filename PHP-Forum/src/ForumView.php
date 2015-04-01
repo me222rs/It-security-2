@@ -207,7 +207,7 @@ require_once 'DBDetails.php';
 						$contentString .= "</fieldset>";
 						
 					}
-					$contentString .= "$this->message";
+					$contentString .= "<p class='ptag'>$this->message</p>";
 					$contentString .= "	<textarea class='commentstext' type='text' name='CommentText'></textarea><br>
 										<input type='submit' class='comments' name='sendComment'  value='Send'>";	 
 					$contentString .= "</form>";
@@ -248,10 +248,10 @@ require_once 'DBDetails.php';
 							<a href='?login'>Back</a><br>
 							<legend>Change Password</legend>
 		
-							Current password: <br><input type='text' name='currentPassword'><br>
-							New password: <br><input type='text' name='newPassword'><br>
-							Repeat new password: <br><input type='text' name='repeatNewPassword'><br>
-						
+							Current password: <br><input type='password' name='currentPassword'><br>
+							New password: <br><input type='password' name='newPassword'><br>
+							Repeat new password: <br><input type='password' name='repeatNewPassword'><br>
+							<div class='g-recaptcha' data-sitekey='6LdK9AMTAAAAABnYjmV2ZlSrdicAtpcqsxF7mX_M'></div><br>
 							<input type='submit' name='sendNewPassword'  value='Change'>
 						</fieldset>
 					</form>
@@ -336,10 +336,24 @@ require_once 'DBDetails.php';
 			
 			
 		}
+		// Visar login-meddelande f�r "H�ll mig inloggad"-funktionen.
+		public function successfulPasswordChange()
+		{
+			$this->showMessage("Your password have been changed!");
+		}
+		public function successfulDeletedTopic()
+		{
+			$this->showMessage("Topic have been deleted!");
+		}
+		public function successfulDeletedComment()
+		{
+			$this->showMessage("Comment have been deleted!");
+		}
 
 		// Visar eventuella meddelanden.
 		public function showMessage($message)
 		{
+			
 			$this->message = "<p>" . $message . "</p>";
 		}
 	}

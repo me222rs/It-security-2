@@ -46,14 +46,14 @@
 				
 				
 				$deleteTopicController = new DeleteTopicController();
-				$deleteTopicController->doHTMLBody();
+				//$deleteTopicController->doHTMLBody();
 
 			}
 			//När en roll försöker tas bort så kan endast användare med behörighet 1 eller lägre genomföra borttagningen
 			elseif($this->forumView->didUserPressDeleteTopic() && $this->model->checkLoginStatus() && $this->model->getLoggedInUserRole() > 1){
 				
-				$topicController = new ShowTopicController();
-				$topicController->doHTMLBody();
+				$deleteTopicController = new DeleteTopicController();
+				//$topicController->doHTMLBody();
 				
 			}
 			//Trycker på Create new topic

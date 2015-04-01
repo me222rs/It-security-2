@@ -26,13 +26,15 @@
 				if($this->ShowForumView->didUserPressDeleteComment() && $this->model->getLoggedInUserRole() == 1 && $this->model->checkLoginStatus()){
 	
 					//Tar bort en specifik topic med hjälp av ett id
-					$this->db->DeleteComment($this->ShowForumView->getCommentID(), $this->model->getLoggedInUser());	
+					$this->db->DeleteComment($this->ShowForumView->getCommentID(), $this->model->getLoggedInUser());
+					$this->ShowForumView->successfulDeletedComment();	
 	
 				}
 				elseif($this->ShowForumView->didUserPressDeleteComment() && $this->db->checkIfIdIsManipulated($this->ShowForumView->getCommentId(), $this->model->getLoggedInUser()) && 
 				$this->model->checkLoginStatus())
 				{
 					$this->db->DeleteComment($this->ShowForumView->getCommentID(), $this->model->getLoggedInUser());
+					$this->ShowForumView->successfulDeletedComment();
 				}
 					
 				

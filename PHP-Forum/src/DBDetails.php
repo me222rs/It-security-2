@@ -101,7 +101,7 @@ require_once("CommentList.php");
 			$query = $db -> prepare($sql);
 			$query -> execute($params);
 			
-			//$this->LogAction($user, "Edited comment with id " . $commentID . ". Changed to " . "text:" . $editCommentText);
+			$this->LogAction($user, "Changed password");
 					
 			} catch (\PDOException $e) {
 					die('An unknown error have occured.');
@@ -193,7 +193,7 @@ require_once("CommentList.php");
 				$params = array($commentText, $user, $topicID);
 				$query = $db -> prepare($sql);
 				$query -> execute($params);
-				//$this->LogAction($a_user, "Created topic with name: " . $a_TopicName . " and text: " . $a_topicText);
+				$this->LogAction($user, "Created comment in topic with id" . $topicID);
 				
 			} catch (\PDOException $e) {
 				//$this->LogAction($a_user, "Failed to create topic with name: " . $a_TopicName . " and text: " . $a_topicText);
@@ -232,7 +232,7 @@ require_once("CommentList.php");
 			$this->LogAction($user, "Deleted topic with id " . $topicID);
 			
 			}catch (\PDOException $e) {
-				$this->LogAction($user, "Failed to delete topic with id " . $topicID);
+				
 				die('An unknown error have occured.');
 			}
 		}
@@ -392,23 +392,23 @@ require_once("CommentList.php");
 			}
 		}
 		//Hämtar och returnerar lösenordet från databasen.
-		public function getDBPassInput($inputPassword)
-		{
-			$db = $this -> connection();
-			$this->dbTable = self::$tblUser;
-			$sql = "SELECT ". self::$password ." FROM `$this->dbTable` WHERE ". self::$password ." = ?";
-			$params = array($inputPassword);
-			$query = $db -> prepare($sql);
-			$query -> execute($params);
-			$result = $query -> fetch();
-			
-			
-			if ($result) {
-				
-				return $result[self::$colpassword];
-				
-			}
-		}
+		// public function getDBPassInput($inputPassword)
+		// {
+			// $db = $this -> connection();
+			// $this->dbTable = self::$tblUser;
+			// $sql = "SELECT ". self::$password ." FROM `$this->dbTable` WHERE ". self::$password ." = ?";
+			// $params = array($inputPassword);
+			// $query = $db -> prepare($sql);
+			// $query -> execute($params);
+			// $result = $query -> fetch();
+// 			
+// 			
+			// if ($result) {
+// 				
+				// return $result[self::$colpassword];
+// 				
+			// }
+		// }
 		
 		
 		
@@ -441,7 +441,7 @@ require_once("CommentList.php");
 				$params = array($inputuser, $inputpassword);
 				$query = $db -> prepare($sql);
 				$query -> execute($params);
-				
+				$this->LogAction("Added user: " . $inputuser);
 				return true;
 			} catch (\PDOException $e) {
 				die('An unknown error have occured.');
