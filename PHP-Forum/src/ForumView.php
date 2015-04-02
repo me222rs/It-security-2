@@ -323,7 +323,6 @@ require_once 'DBDetails.php';
 						<textarea type='text' name='topicEditText'>".$topic->getText()."</textarea><br>";
 						$contentString.= "Written by: ".$topic->getOwner()." <br>Skicka: <input type='submit' name='sendEditTopic'  value='Send'>";
 						$contentString .= "</fieldset>";
-						$contentString .= "Comments here:";
 					}
 							 
 					$contentString .= "</form>";

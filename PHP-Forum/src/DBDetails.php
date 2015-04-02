@@ -17,7 +17,7 @@ require_once("CommentList.php");
 		private static $topicName = "topicName";
 		private static $topicText = "topicText";
 		private static $topicOwnerID = "topicOwnerID";
-		
+		private static $ipAdress = "ipAdress";
 		private static $commentID = "commentID";
 		private static $topicId = "topicId";
 		private static $comment = "comment";
@@ -150,11 +150,12 @@ require_once("CommentList.php");
 		
 		
 		public function LogAction($user, $action){
+			
 			try{
 				$db = $this -> connection();
 				$this->dbTable = self::$tblLogs;
-				$sql = "INSERT INTO $this->dbTable (". self::$User .",". self::$Action  .") VALUES (?, ?)";
-				$params = array($user, $action);
+				$sql = "INSERT INTO $this->dbTable (". self::$User .",". self::$Action  .", ". self::$ipAdress.") VALUES (?, ?, ?)";
+				$params = array($user, $action, $_SERVER['REMOTE_ADDR']);
 				$query = $db -> prepare($sql);
 				$query -> execute($params);
 				
