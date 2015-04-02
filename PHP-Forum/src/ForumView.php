@@ -207,7 +207,7 @@ require_once 'DBDetails.php';
 						$contentString .= "</fieldset>";
 						
 					}
-					$contentString .= "<p class='ptag'>$this->message</p>";
+					$contentString .= "<p>$this->message</p>";
 					$contentString .= "	<textarea class='commentstext' type='text' name='CommentText'></textarea><br>
 										<input type='submit' class='comments' name='sendComment'  value='Send'>";	 
 					$contentString .= "</form>";
@@ -354,7 +354,7 @@ require_once 'DBDetails.php';
 		public function showMessage($message)
 		{
 			
-			$this->message = "<p>" . $message . "</p>";
+			$this->message = "<p class='ptag'>" . $message . "</p>";
 		}
 	}
 ?>

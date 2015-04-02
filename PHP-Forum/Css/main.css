@@ -138,7 +138,7 @@ span{
 p{
 	border: 0;
 	font-family:verdana;
-	margin-left:10%; 
+	 
 }
 
 h2{
@@ -193,6 +193,10 @@ input[type="submit"]:active {
 
 	text-align: center;
 	width:50%;
+}
+.ptag{
+	margin-left:10%;
+	font-family: verdana;
 }   
 
 .loginstatus{
