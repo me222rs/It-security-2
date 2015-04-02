@@ -250,11 +250,11 @@ require_once 'DBDetails.php';
 							//Hämtar ut användarens roll ifall användarnamn och lösen matchar
 							$db = $this -> connection();
 							$sql = "SELECT `role` FROM `$this->dbTable` WHERE `username` = ?";
-							$params = array($DB_Username);
+							$params = array($inputUsername);
 							$query = $db -> prepare($sql);
 							$query -> execute($params);
 							$result = $query -> fetch();
-							
+							//echo $result;
 							// Inloggningsstatus, roll och anv�ndarnamn sparas i sessionen.
 							$_SESSION['role'] = $result['role'];
 							$_SESSION['loggedIn'] = true;
