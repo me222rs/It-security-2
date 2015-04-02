@@ -199,42 +199,14 @@ require_once 'DBDetails.php';
 		// Kontrollerar anv�ndarinput gentemot de faktiska anv�ndaruppgifterna.
 		public function verifyUserInput($inputUsername, $inputPassword, $isCookieLogin = false)
 		{
-			
-			
-			$db = $this -> connection();
-			$sql = "SELECT `username` FROM `$this->dbTable` WHERE `username` = ?";
-			$params = array($inputUsername);
-			$query = $db -> prepare($sql);
-			$query -> execute($params);
-			$result = $query -> fetch();
-			
-			
-			if ($result) {
-				$result['username'];
-				$DB_Username = $result['username'];
-			}
 
-			$db = $this -> connection();
-			$sql = "SELECT `password` FROM `$this->dbTable` WHERE `password` = ?";
-			$params = array($inputPassword);
-			$query = $db -> prepare($sql);
-			$query -> execute($params);
-			$result = $query -> fetch();
-			
-			
-			
-			if ($result) {
-				$result['password'];
-				$DB_Password = $result['password'];
-				
-			}
 			if($inputUsername == "" || $inputUsername === NULL)
 			{
 				// Kasta undantag.
 				throw new Exception("Username missing");
 			}
 			
-			if($inputPassword == "" || $inputPassword === NULL || $inputPassword === md5(""))
+			if($inputPassword == "" || $inputPassword === NULL)
 			{
 				// Kasta undantag.
 				throw new Exception("Password missing");
@@ -264,9 +236,15 @@ require_once 'DBDetails.php';
 					if($res['success'] == NULL)
 					{
 						
-						// Kontrollerar ifall inparametrarna matchar de faktiska anv�ndaruppgifterna.
-						if($inputUsername == $DB_Username && $inputPassword == $DB_Password)
-						{
+						$db = $this -> connection();
+						$sql = "SELECT * FROM `$this->dbTable` WHERE username= ? AND password= ?";
+						$params = array($inputUsername, $inputPassword);
+						$query = $db -> prepare($sql);
+						$query -> execute($params);
+						$rows = $query -> fetchColumn();
+						
+						if($rows) {
+							
 							$this->db->LogAction($inputUsername, "User logged in");
 							
 							//Hämtar ut användarens roll ifall användarnamn och lösen matchar
@@ -284,11 +262,11 @@ require_once 'DBDetails.php';
 							
 							// Sparar useragent i sessionen.
 							$_SESSION['sessionUserAgent'] = $this->sessionUserAgent;
-							return true;
+							
+							return TRUE;
 						}
-						else
-						{
-							// �r det en inloggning med cookies...
+						else{
+														// �r det en inloggning med cookies...
 							if($isCookieLogin)
 							{
 								// Kasta cookie-felmeddelande.
@@ -299,6 +277,9 @@ require_once 'DBDetails.php';
 							$this->db->LogAction($inputUsername, "User failed to log in");
 							throw new Exception("Wrong username or password");
 						}
+
+						}
+
 					}
 					else
 					{
@@ -311,8 +292,8 @@ require_once 'DBDetails.php';
 				throw new Exception("Wrong Captcha");
 				}
 				
-				}
-			
+				
+				
 		}
 		
 		public function cookieException()
