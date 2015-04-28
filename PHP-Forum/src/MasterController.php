@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	require_once("common/HTMLView.php");
 	require_once("LoginController.php");
 	require_once("LoginModel.php");

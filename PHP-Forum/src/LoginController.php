@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	
 	require_once("src/LoginModel.php");
 	require_once("src/LoginView.php");

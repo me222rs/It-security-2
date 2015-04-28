@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once 'common/HTMLView.php';
 	class LoginView extends HTMLView
 	{
@@ -42,7 +42,11 @@ require_once 'common/HTMLView.php';
 		public function getRegisterUsername(){
 			if(isset($_POST['createusername']))
 			{
-				return htmlspecialchars($_POST['createusername']);
+				$str = $_POST['createusername'];
+				$str = trim($str);
+				$str = strip_tags($str);
+				$str = filter_var($str, FILTER_SANITIZE_STRING);
+				return htmlspecialchars($str);
 			}
 			return false;
 		}
@@ -182,7 +186,7 @@ require_once 'common/HTMLView.php';
 						<fieldset>
 							<legend>Register new user - Write username and password</legend>
 							$this->message
-							Name:<br> <input type='text' name='createusername' value='". htmlspecialchars($_POST['createusername']) ."'><br>
+							Name:<br> <input type='text' name='createusername' value='". $this->getRegisterUsername() ."'><br>
 							Password:<br> <input type='password' name='createpassword'><br>
 							Repeat Password:<br> <input type='password' name='repeatpassword'><br>
 							<input type='submit' name='createuserbutton'  value='Register'>
@@ -251,7 +255,14 @@ require_once 'common/HTMLView.php';
 		{
 			if(isset($_POST['username']))
 			{
-				return htmlspecialchars($_POST['username']);
+
+
+				$str = $_POST['username'];
+				$str = trim($str);
+				$str = strip_tags($str);
+				$str = filter_var($str, FILTER_SANITIZE_STRING);
+				return htmlspecialchars($str);
+				//return $str;
 			}
 			
 			// �r inte anv�ndarnamnet satt skickas en tomstr�ng med.
