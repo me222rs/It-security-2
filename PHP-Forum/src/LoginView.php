@@ -44,8 +44,8 @@ require_once 'common/HTMLView.php';
 			{
 				$str = $_POST['createusername'];
 				$str = trim($str);
-				$str = strip_tags($str);
 				$str = filter_var($str, FILTER_SANITIZE_STRING);
+				$str = strip_tags($str);
 				return htmlspecialchars($str);
 			}
 			return false;
@@ -259,8 +259,8 @@ require_once 'common/HTMLView.php';
 
 				$str = $_POST['username'];
 				$str = trim($str);
-				$str = strip_tags($str);
 				$str = filter_var($str, FILTER_SANITIZE_STRING);
+				$str = strip_tags($str);
 				return htmlspecialchars($str);
 				//return $str;
 			}
