@@ -42,7 +42,7 @@ require_once 'common/HTMLView.php';
 		public function getRegisterUsername(){
 			if(isset($_POST['createusername']))
 			{
-				return $_POST['createusername'];
+				return htmlspecialchars($_POST['createusername']);
 			}
 			return false;
 		}
@@ -182,7 +182,7 @@ require_once 'common/HTMLView.php';
 						<fieldset>
 							<legend>Register new user - Write username and password</legend>
 							$this->message
-							Name:<br> <input type='text' name='createusername' value='". strip_tags($_POST['createusername']) ."'><br>
+							Name:<br> <input type='text' name='createusername' value='". htmlspecialchars($_POST['createusername']) ."'><br>
 							Password:<br> <input type='password' name='createpassword'><br>
 							Repeat Password:<br> <input type='password' name='repeatpassword'><br>
 							<input type='submit' name='createuserbutton'  value='Register'>
@@ -251,7 +251,7 @@ require_once 'common/HTMLView.php';
 		{
 			if(isset($_POST['username']))
 			{
-				return $_POST['username'];
+				return htmlspecialchars($_POST['username']);
 			}
 			
 			// �r inte anv�ndarnamnet satt skickas en tomstr�ng med.
